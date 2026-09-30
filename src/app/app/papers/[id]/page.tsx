@@ -16,11 +16,19 @@ import {
   verifyArxivAction, withdrawPaperAction,
 } from "../../actions";
 
+const NOTICES: Record<string, string> = {
+  shared: "Shared. The review has started.",
+  shared_waitlisted: "All review slots are busy, so this reviewer is on the waitlist. They'll start automatically when a slot frees.",
+  released: "Reviewer released.",
+  confirmed: "Endorsement confirmed. Congratulations! Every other review on this paper has been closed.",
+  withdrawn: "Paper withdrawn. Its files will be deleted in 30 days.",
+};
+
 type Match = { user_id: string; handle: string; display_name: string; headline: string | null; public_availability: boolean;
   karma: number; capability_status: string; shared_topics: number; at_capacity: boolean; nudged: boolean };
 
 export default async function PaperPage({ params, searchParams }: {
-  params: Promise<{ id: string }>; searchParams: Promise<{ posted?: string; draft?: string }>;
+  params: Promise<{ id: string }>; searchParams: Promise<{ posted?: string; draft?: string; notice?: string }>;
 }) {
   const { id } = await params;
   const sp = await searchParams;
@@ -82,6 +90,8 @@ export default async function PaperPage({ params, searchParams }: {
   return (
     <div className="space-y-8">
       {sp.posted && <p className="alert alert-ok">Your abstract is posted. Endorsers in {paper.primary_category} can now accept it.</p>}
+      {sp.draft && <p className="alert alert-error">Saved as a draft. Complete the readiness check below to post it.</p>}
+      {sp.notice && NOTICES[sp.notice] && <p role="status" className="alert alert-ok">{NOTICES[sp.notice]}</p>}
       <div>
         <p className="text-sm muted">{paper.primary_category}{paper.cross_list_categories.length ? ` · cross-list ${paper.cross_list_categories.join(", ")}` : ""} · {PAPER_TYPE_LABEL[paper.paper_type]}</p>
         <h1 className="h1 mt-1">{paper.title}</h1>

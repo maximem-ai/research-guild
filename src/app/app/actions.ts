@@ -224,8 +224,7 @@ export async function readinessAndPostAction(_prev: ActionState, fd: FormData): 
     });
     if (!check.passed) return { error: `Not ready yet: ${check.failed_items.join(", ")}. See the notes next to each question.` };
     await rpc(supabase, "post_abstract", { p_paper: id });
-    revalidatePath(`/app/papers/${id}`);
-    return "Your abstract is posted. Endorsers in your category can now see it.";
+    redirect(`/app/papers/${id}?posted=1`);
   });
 }
 
@@ -234,8 +233,7 @@ export async function withdrawPaperAction(_prev: ActionState, fd: FormData): Pro
     const { supabase } = await requireProfile();
     const id = str(fd, "paper_id");
     await rpc(supabase, "withdraw_paper", { p_paper: id });
-    revalidatePath(`/app/papers/${id}`);
-    return "Paper withdrawn. Its files will be deleted in 30 days.";
+    redirect(`/app/papers/${id}?notice=withdrawn`);
   });
 }
 
@@ -301,8 +299,7 @@ export async function sharePaperAction(_prev: ActionState, fd: FormData): Promis
   return run(async () => {
     const { supabase } = await requireProfile();
     const state = await rpc<string>(supabase, "share_paper", { p_engagement: str(fd, "engagement_id") });
-    revalidatePath(`/app/papers/${str(fd, "paper_id")}`);
-    return state === "reviewing" ? "Shared. The review has started." : "All review slots are busy, so this reviewer is on the waitlist.";
+    redirect(`/app/papers/${str(fd, "paper_id")}?notice=${state === "reviewing" ? "shared" : "shared_waitlisted"}`);
   });
 }
 
@@ -310,8 +307,7 @@ export async function releaseReviewerAction(_prev: ActionState, fd: FormData): P
   return run(async () => {
     const { supabase } = await requireProfile();
     await rpc(supabase, "release_reviewer", { p_engagement: str(fd, "engagement_id") });
-    revalidatePath(`/app/papers/${str(fd, "paper_id")}`);
-    return "Reviewer released.";
+    redirect(`/app/papers/${str(fd, "paper_id")}?notice=released`);
   });
 }
 
@@ -319,8 +315,7 @@ export async function confirmEndorsementAction(_prev: ActionState, fd: FormData)
   return run(async () => {
     const { supabase } = await requireProfile();
     await rpc(supabase, "confirm_endorsement", { p_engagement: str(fd, "engagement_id") });
-    revalidatePath(`/app/papers/${str(fd, "paper_id")}`);
-    return "Endorsement confirmed. Congratulations!";
+    redirect(`/app/papers/${str(fd, "paper_id")}?notice=confirmed`);
   });
 }
 
@@ -437,8 +432,7 @@ export async function recordEndorsedAction(_prev: ActionState, fd: FormData): Pr
     const e = str(fd, "engagement_id");
     if (fd.get("confirm") !== "on") throw new ActionError("Please confirm you submitted the endorsement on arXiv.");
     await rpc(supabase, "record_endorsed", { p_engagement: e });
-    revalidatePath(`/app/reviews/${e}`);
-    return "Recorded. The author has been asked to confirm.";
+    redirect(`/app/reviews/${e}?notice=endorsed`);
   });
 }
 
@@ -448,8 +442,7 @@ export async function recordDeclinedAction(_prev: ActionState, fd: FormData): Pr
     const e = str(fd, "engagement_id");
     const reason = [str(fd, "template"), str(fd, "reason")].filter(Boolean).join("\n\n");
     await rpc(supabase, "record_declined", { p_engagement: e, p_reason: reason });
-    revalidatePath(`/app/reviews/${e}`);
-    return "Declined. Thank you for giving the author an honest answer.";
+    redirect(`/app/reviews/${e}?notice=declined`);
   });
 }
 
@@ -458,8 +451,7 @@ export async function withdrawEngagementAction(_prev: ActionState, fd: FormData)
     const { supabase } = await requireProfile();
     const e = str(fd, "engagement_id");
     await rpc(supabase, "withdraw_engagement", { p_engagement: e });
-    revalidatePath(`/app/reviews/${e}`);
-    return "You've withdrawn from this review.";
+    redirect(`/app/reviews/${e}?notice=withdrawn`);
   });
 }
 

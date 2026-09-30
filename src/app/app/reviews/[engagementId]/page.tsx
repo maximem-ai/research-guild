@@ -8,6 +8,12 @@ import { daysLeft, ENGAGEMENT_STATE_LABEL, fmtDate, PAPER_TYPE_LABEL, waitlistTe
 import type { Engagement, FeedbackMessage, Paper, PaperVersion, Profile } from "@/lib/types";
 import { markLinkedinAction, recordDeclinedAction, recordEndorsedAction, reportAction, withdrawEngagementAction } from "../../actions";
 
+const NOTICES: Record<string, string> = {
+  endorsed: "Recorded. The author has been asked to confirm.",
+  declined: "Declined. Thank you for giving the author an honest answer — remember to record it on arXiv's form too.",
+  withdrawn: "You've withdrawn from this review.",
+};
+
 const DECLINE_TEMPLATES = [
   { id: "wrong_category", label: "Wrong category", text: "I don't think this paper fits this category. A better primary category might be: " },
   { id: "cs_peer_review", label: "CS survey/position without peer review", text: "arXiv CS only accepts review/survey and position papers that have already passed peer review, and I couldn't see evidence of that." },
@@ -17,7 +23,7 @@ const DECLINE_TEMPLATES = [
 ];
 
 export default async function ReviewPage({ params, searchParams }: {
-  params: Promise<{ engagementId: string }>; searchParams: Promise<{ accepted?: string }>;
+  params: Promise<{ engagementId: string }>; searchParams: Promise<{ accepted?: string; notice?: string }>;
 }) {
   const { engagementId } = await params;
   const sp = await searchParams;
@@ -54,6 +60,7 @@ export default async function ReviewPage({ params, searchParams }: {
     <div className="grid gap-8 lg:grid-cols-[1fr_300px]">
       <div className="space-y-8">
         {sp.accepted && <p className="alert alert-ok">Accepted. The author has been notified and can now share the full paper with you.</p>}
+        {sp.notice && NOTICES[sp.notice] && <p role="status" className="alert alert-ok">{NOTICES[sp.notice]}</p>}
         <div>
           <p className="text-sm muted">{paper.primary_category} · {PAPER_TYPE_LABEL[paper.paper_type]} · posted {fmtDate(paper.posted_at)}</p>
           <h1 className="h1 mt-1">{paper.title}</h1>
