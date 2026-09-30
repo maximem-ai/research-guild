@@ -157,7 +157,7 @@ export default async function PaperPage({ params, searchParams }: {
             <ul className="mt-3 space-y-1 text-sm">
               {versions.map((v) => (
                 <li key={v.id}>
-                  v{v.version_no} · {fmtDate(v.uploaded_at)} · {(v.size_bytes / 1024 / 1024).toFixed(1)} MB{v.note && ` · ${v.note}`}{" "}
+                  v{v.version_no} · {fmtDate(v.uploaded_at)} · {v.size_bytes >= 1048576 ? `${(v.size_bytes / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(v.size_bytes / 1024))} KB`}{v.note && ` · ${v.note}`}{" "}
                   {v.storage_path ? <a className="link" href={`/app/files/${v.id}`} target="_blank" rel="noopener">open</a> : <span className="muted">deleted</span>}
                 </li>
               ))}

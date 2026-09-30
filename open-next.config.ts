@@ -1,4 +1,9 @@
 import { defineCloudflareConfig } from "@opennextjs/cloudflare";
+import staticAssetsIncrementalCache from "@opennextjs/cloudflare/overrides/incremental-cache/static-assets-incremental-cache";
 
-// No incremental cache binding: learn pages are fully static and served from assets.
-export default defineCloudflareConfig({});
+// Learning-center pages are prerendered at build time and never revalidated, so the read-only
+// static-assets cache is enough (no KV/R2 binding, nothing extra to provision).
+export default defineCloudflareConfig({
+  incrementalCache: staticAssetsIncrementalCache,
+  enableCacheInterception: true,
+});

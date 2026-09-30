@@ -32,11 +32,13 @@
   }
 }
 
-html { background: var(--bg); color: var(--fg); }
-body { font-family: var(--font-sans); line-height: 1.55; -webkit-font-smoothing: antialiased; }
-h1, h2, h3 { font-family: var(--font-serif); letter-spacing: -0.01em; }
-a { color: inherit; }
-:focus-visible { outline: 2px solid var(--color-accent-500); outline-offset: 2px; border-radius: 4px; }
+@layer base {
+  html { background: var(--bg); color: var(--fg); }
+  body { font-family: var(--font-sans); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: var(--font-serif); letter-spacing: -0.01em; }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--color-accent-500); outline-offset: 2px; border-radius: 4px; }
+}
 
 @layer components {
   .container-page { @apply mx-auto w-full max-w-5xl px-4 sm:px-6; }
