@@ -1,0 +1,50 @@
+# Decisions
+
+Choices made where the spec was silent or had to be adapted. Newest decisions go at the bottom.
+
+## Product and rules
+
+1. **Sign in with Hugging Face is not used.** Supabase Auth has no first-class Hugging Face provider, and the spec requires Supabase-only auth, with no extra hosted service. Users add their Hugging Face username manually on their profile instead. We show public model, dataset and Space counts from `huggingface.co/api/users/<name>/overview` (cached for a day, non-blocking), and posted papers link to `huggingface.co/papers/<arxiv id>`.
+2. **Email/password auth exists only locally**, so the end-to-end tests can create sessions. Production keeps the Email provider disabled (README step 3). There are no magic links and no emails.
+3. **Accepting an abstract requires an active endorser capability in the paper's primary category** (claimed or confirmed, not suspended, not paused). arXiv endorsements are per endorsement domain, and a category-level capability is the simplest safe proxy. Anyone signed in can still *browse* the feed.
+4. **Feedback rounds.** A new round starts when the reviewer writes after the author (or writes first). Consecutive reviewer messages stay in the same round, and author replies are tagged with the current round. This stops karma farming by splitting one message into many. Only rounds 1–3 earn karma, as the spec requires.
+5. **Review TTL activity.** `last_activity_at` is refreshed by reviewer actions (opening the paper, LinkedIn check, feedback) and by the author uploading a new version or sharing. It is not refreshed by an author message alone, since the TTL exists to catch ghosting reviewers.
+6. **Decline requires having opened the full paper, but not the LinkedIn check.** "Couldn't verify identity" is itself a decline reason. Endorsing requires both, enforced in SQL.
+7. **One pending endorsement per paper.** `endorsements.paper_id` is unique, so a second reviewer can't record an endorsement while one awaits confirmation. If the author releases the pending reviewer, the unconfirmed endorsement is deleted and others can endorse.
+8. **Engagements in `endorsed_pending_author` don't free a slot for waitlist promotion.** Promotion triggers only on the terminal states listed in §5.3 (declined, withdrawn, released, expired), plus release of a pending endorsement.
+9. **Withdrawing a paper** moves its open engagements to `released_by_author` (no dedicated state exists) and notifies the reviewers.
+10. **Waitlisted engagements don't expire.** The spec lists TTLs only for `accepted` and `reviewing`.
+11. **Papers are never auto-expired.** `paper_status.expired` exists for moderators and future use. No TTL for open papers is specified.
+12. **Co-authors** can do everything the owner can on a paper except edit the abstract, add or remove co-authors, post, or withdraw. Co-authors must already have an account (added by handle).
+13. **The endorsement code is unique across papers** (a unique index, per the spec), and is normalised to upper case.
+14. **Nudges:** at most one nudge per endorser per paper (the table is unique on that pair), and at most `max_nudges_per_paper_per_week` (default 3) per paper per rolling 7 days. Authors can nudge only endorsers with public pages from the UI; the count of others is shown.
+15. **The "3rd reviewer waitlisted" acceptance scenario** in §16 conflicts with the default of 3 active reviewers (the 4th would be waitlisted). The end-to-end acceptance test runs the scenario with `max_active_reviewers_per_paper = 2` and restores 3 afterwards. The pgTAP tests cover the default (4th share → waitlisted).
+16. **Karma for the pay-it-forward pledge** (+5, once, with the badge) is the spec's §13b.C rule. It appears on the karma page alongside §8's table.
+17. **Anti-gaming co-author check.** Two users count as co-authors if they share an OpenAlex work ID in `profile_publications`, or one's display name appears in the other's publication co-author list (case-insensitive). Skipped awards are written to `audit_log`.
+18. **Mutual endorsements** are detected daily: A endorsed B's paper and B endorsed A's, both confirmed within 365 days of each other. Each pair is flagged once.
+19. **Ghosting pattern flag:** 3 or more ghosting penalties within 90 days raises a `ghosting_pattern` moderation flag.
+20. **Leaderboard names** are shown only for endorsers with a public availability page. Everyone else appears as "A community member", because the spec keeps profiles readable only to signed-in users.
+21. **Readiness check freshness:** `post_abstract` requires the latest check to pass, to be newer than the paper's last content edit (`updated_at`), and to still evaluate as passing against the current paper.
+22. **Profiles are written only through `upsert_profile`**, not direct table writes, so `karma`, `role` and the verified `github_username` can't be tampered with. The GitHub username is read from `auth.identities`.
+23. **Minimum age** (16) is confirmed by a checkbox at onboarding. The confirmation time is stored in `profiles.age_attested_at`.
+24. **Abstract privacy:** other signed-in users browse open abstracts through the `open_abstracts` view (limited columns). The `papers` table itself is readable only by members, engaged reviewers and moderators.
+
+## Technical
+
+25. **Learning-center content is Markdown with YAML frontmatter in `.mdx` files**, compiled at build time by `scripts/build-learn.mjs` (unified/remark) into static JSON. We avoided an MDX runtime because Workers disallow `eval`-style code and it would bloat the bundle. JSX components inside articles aren't supported, and none are needed.
+26. **Article OG images** are served from `/og/learn/[slug]`, a statically generated route handler, rather than `opengraph-image` inside the `[...slug]` catch-all. That combination is unreliable.
+27. **OpenNext incremental cache: `staticAssetsIncrementalCache`** (read-only). Prerendered learn pages are served from Workers static assets, with no KV or R2 to provision. Dynamic pages (home counter, karma, availability pages) render per request.
+28. **PDF upload goes through a server action** (body limit raised to 11 MB). It checks the `%PDF` magic bytes and size, computes SHA-256, uploads with the user's own Storage credentials (Storage RLS applies), then calls `upload_version`. If the RPC fails, the orphaned object is removed with the service role.
+29. **Opening a paper** goes through the `GET /app/files/[versionId]?engagement=…` route. It calls `log_paper_open` (which sets `paper_opened_at`), then redirects to a 5-minute signed URL created with the user's client, so Storage RLS applies again.
+30. **arXiv verification** runs in a server action. It queries `export.arxiv.org` (Atom, parsed with regexes because Workers have no DOMParser) and fuzzy-matches the author's display name (last name must match, first name or initial compatible). It then calls `verify_arxiv_posting` with the service role. That RPC is not executable by clients, because it trusts the server's arXiv lookup.
+31. **Edge Functions use plain `fetch`** against PostgREST and the Storage API instead of `supabase-js`. That removes a network dependency at boot, and they start fast.
+32. **Cron → Edge Functions** use `pg_net` with the project URL and service-role key stored in **Vault** (`project_url`, `service_role_key`). If either is missing, the job no-ops instead of failing.
+33. **PDF retention** deletes Storage objects through the Storage API in the `retention` Edge Function, not with SQL `DELETE` on `storage.objects`, which Supabase blocks. Version metadata (hash, size, dates) is kept, with `storage_path = null` and `deleted_at` set.
+34. **Embeddings job claiming** skips categories below the smart-matching thresholds and leaves those jobs queued. Once a category crosses the threshold, its backlog is embedded. Jobs are retried up to 5 times.
+35. **Feed and matching recency boost** = `max(0, 1 − age / 14 days)`.
+36. **Views that expose aggregates** (`public_profiles`, `endorser_track_record`, `pledge_stats`, `open_abstracts`) are owner-privileged (security definer) views on purpose. They expose only safe columns or aggregates.
+37. **Leaderboards** are a materialized view (`karma_leaderboard`), refreshed daily by `run_daily_maintenance()`. Karma is attributed to the category of the engagement's paper. Karma not tied to an engagement counts only in the "all categories" board.
+38. **Categories:** every `cs.*` category plus a starter set in stat, math, eess, q-bio, econ, physics and quant-ph. Curated sub-topics exist for the 10 categories named in §7. Other categories match on category alone.
+39. **Postgres version:** local config uses Postgres 17, matching current Supabase projects. The migrations also run on Postgres 16 (`npm run test:db`).
+40. **Learning-center drafting constraint:** info.arxiv.org and blog.arxiv.org couldn't be fetched directly from the build environment, so articles were drafted from search snippets of those official pages. Every article is marked `needsReview: true` and shows a "Draft · awaiting human review" badge until a maintainer verifies it against the live pages and flips the flag. Deliberately vague points (for example, the exact number of papers needed to endorse) are left for that review.
+41. **Security headers:** `X-Frame-Options: DENY`, `nosniff`, a strict referrer policy and a restrictive permissions policy. `/app/**` also sends `X-Robots-Tag: noindex`, in addition to the robots.txt disallow.
