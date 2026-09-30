@@ -1,0 +1,90 @@
+---
+title: "Choosing your primary category (cs.AI vs cs.LG vs cs.CL and friends)"
+description: "How to pick the right arXiv primary category for AI, machine learning and NLP papers, using arXiv's own taxonomy and machine learning classification guide."
+section: before-authoring
+order: 3
+lastVerified: "2026-09-30"
+needsReview: true
+cta: author
+sources:
+  - title: "Category Taxonomy - arXiv"
+    url: "https://arxiv.org/category_taxonomy"
+  - title: "Computer Science Subject Areas and Moderators - arXiv"
+    url: "https://arxiv.org/corr/subjectclasses"
+  - title: "arXiv Machine Learning Classification Guide - News from arXiv"
+    url: "https://blog.arxiv.org/2019/12/05/arxiv-machine-learning-classification-guide/"
+  - title: "Content Moderation - arXiv info"
+    url: "https://info.arxiv.org/help/moderation/index.html"
+  - title: "New User-Driven Classification Tool Released - News from arXiv"
+    url: "https://blog.arxiv.org/2020/05/20/new-user-driven-classification-tool-released/"
+faq:
+  - q: "My paper uses machine learning for a medical imaging task. Is cs.LG my primary?"
+    a: "arXiv's machine learning classification guide says that if the application domain has its own arXiv category and its readers are the main audience, that category should be primary. Papers applying ML to specific domain applications should go to the application topic, with cs.LG or cs.CV as a secondary."
+  - q: "What is the difference between cs.AI and cs.LG?"
+    a: "Per arXiv's subject class descriptions, cs.AI covers AI except areas with their own subject classes, such as vision, robotics, machine learning, multiagent systems and computation and language. cs.LG covers machine learning research and is also an appropriate primary for applications of ML methods."
+  - q: "Should I choose cs.LG or stat.ML?"
+    a: "arXiv's guide says ML papers with a statistical focus, such as new statistical methodology, are more appropriate for stat.ML. Papers with stat.ML as primary are automatically cross-listed to cs.LG, but not the other way round."
+  - q: "What happens if I pick the wrong category?"
+    a: "Moderators may reclassify submissions so they appear in the most relevant category, and your paper may be put on hold while that is decided."
+related:
+  - cross-listing
+  - after-you-submit
+  - is-arxiv-right-for-my-paper
+---
+
+Every arXiv submission has one **primary category**, the place where your paper is announced and where its main readers will find it. You may also add a small number of cross-lists (see [Cross-listing](/learn/cross-listing)). Picking the primary well helps readers find you and reduces the chance that moderators need to reclassify your paper or hold it.
+
+This article focuses on the categories that most first-time authors in AI ask about. Endorse Commons is not affiliated with arXiv; the [arXiv Category Taxonomy](https://arxiv.org/category_taxonomy) is the authoritative list, and it is worth reading the description of every category you are considering.
+
+## The key idea: who is your main reader?
+
+arXiv's Machine Learning Classification Guide gives a useful principle: if the primary domain of your application is available as another arXiv category, and readers of that category would be the main audience, that application category should be primary.
+
+So before you look at category codes, finish this sentence: "The people who most need to read this paper are researchers in ____." That answer usually points to your primary.
+
+## The common AI-adjacent categories
+
+The summaries below paraphrase arXiv's subject class descriptions. Read the originals before deciding.
+
+| Category | What arXiv says it covers (paraphrased) |
+|---|---|
+| cs.AI (Artificial Intelligence) | All areas of AI **except** vision, robotics, machine learning, multiagent systems, and computation and language, which have their own subject classes. |
+| cs.LG (Machine Learning) | All aspects of machine learning research (supervised, unsupervised, reinforcement learning, bandits and so on), including robustness, explanation, fairness and methodology. Also an appropriate primary for applications of ML methods. |
+| cs.CL (Computation and Language) | Natural language processing and computational linguistics. Work on artificial languages (programming languages, logics, formal systems) that doesn't address natural-language issues is not appropriate here. |
+| cs.CV (Computer Vision and Pattern Recognition) | Image processing, computer vision, pattern recognition and scene understanding. |
+| cs.IR (Information Retrieval) | Topics such as recommender systems, document classification, topic modelling and computational advertising. |
+| stat.ML (Machine Learning, Statistics) | Machine learning with a statistical focus. |
+
+### cs.AI is not the "default" for anything AI-related
+
+A frequent mistake is choosing cs.AI because a paper involves "AI". arXiv's description explicitly excludes areas that have their own classes. A language-model paper whose main readers are NLP researchers usually belongs in cs.CL; a new training method usually belongs in cs.LG.
+
+### cs.LG vs stat.ML
+
+arXiv's guide says the choice often depends on the authors' home field, and that ML papers with a statistical focus (new statistical methodology or derivations) are more appropriate for stat.ML. It also notes that papers with stat.ML as primary are automatically cross-listed to cs.LG, but not vice versa.
+
+### Reinforcement learning
+
+Per the guide, reinforcement learning papers should generally have cs.LG as primary, unless they are more appropriate in math.OC (optimisation and control), econ.GN, eess.SY (systems and control), or stat.ML (statistical grounding).
+
+### Applied ML papers
+
+The guide says papers that use computer vision or machine learning methods to tackle a specific domain application (its example is detecting diseases in medical images) should be submitted to the topic dealing with that application, with cs.CV as a secondary. The same logic applies to other applied fields.
+
+## A short decision checklist
+
+1. List two or three candidate categories.
+2. Read each one's full description on the taxonomy page.
+3. Look at recent listings in each category: do papers like yours appear there?
+4. Check where the papers you cite most were posted.
+5. Pick the one whose readers are your main audience. Add at most one or two cross-lists if others genuinely care.
+
+## What if a moderator disagrees?
+
+arXiv's moderation pages say moderators may reclassify submissions so they appear in the most relevant category, and questions about classification are one reason a submission can be put on hold. That is normal and not a judgement on your work. See [After you submit](/learn/after-you-submit).
+
+Note also that endorsement is tied to endorsement domains, so your category choice affects which endorser can help you. See [What is arXiv endorsement?](/learn/what-is-arxiv-endorsement).
+
+## Get a second opinion
+
+If you are torn between two categories, ask a reviewer on Endorse Commons. People who read those listings regularly can often tell you in a sentence where your paper will feel at home. [Start a paper](/app/papers/new) to request feedback.

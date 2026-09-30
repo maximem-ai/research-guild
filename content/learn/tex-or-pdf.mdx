@@ -1,0 +1,101 @@
+---
+title: "TeX or PDF? Preparing files arXiv will accept"
+description: "Should you upload LaTeX source or a PDF to arXiv? What arXiv says about PDFs made from TeX, fonts, figures, .bbl files and common reasons processing fails."
+section: before-authoring
+order: 6
+lastVerified: "2026-09-30"
+needsReview: true
+cta: author
+sources:
+  - title: "Submit TeX/LaTeX - arXiv info"
+    url: "https://info.arxiv.org/help/submit_tex.html"
+  - title: "Submit a PDF - arXiv info"
+    url: "https://info.arxiv.org/help/submit_pdf.html"
+  - title: "Policies for Format Requirements - arXiv info"
+    url: "https://info.arxiv.org/help/policies/format_requirements.html"
+  - title: "Why Submit the TeX/LaTeX Source? - arXiv info"
+    url: "https://info.arxiv.org/help/faq/whytex.html"
+  - title: "Common Mistakes that cause Automated Processing to Fail - arXiv info"
+    url: "https://info.arxiv.org/help/faq/mistakes.html"
+  - title: "Ancillary Files - arXiv info"
+    url: "https://info.arxiv.org/help/ancillary_files.html"
+  - title: "Oversized Submissions - arXiv info"
+    url: "https://info.arxiv.org/help/sizes.html"
+faq:
+  - q: "I wrote my paper in LaTeX. Can I just upload the PDF?"
+    a: "Generally no. arXiv says it does not accept PDF created from TeX/LaTeX source and that such PDFs will typically be rejected, with exceptions considered case by case. Upload the source instead."
+  - q: "I wrote my paper in Word. What do I submit?"
+    a: "Submit a PDF. arXiv's PDF page gives guidance on exporting from Word, and asks for a single PDF with all text and figures, using outline (TrueType/Type1) fonts rather than bitmap (Type3) fonts."
+  - q: "Should I include my .bbl file?"
+    a: "arXiv treats processed BibTeX .bbl files as an exception to the rule against intermediate files. The .bbl file name must match the main .tex file name."
+  - q: "Can I upload a scanned document?"
+    a: "No. arXiv says it does not accept scanned documents, regardless of format."
+  - q: "Is there a file size limit?"
+    a: "Yes, arXiv has size limits and a dedicated Oversized Submissions page. Limits can change, so check that page for current figures."
+related:
+  - english-language-requirement
+  - licenses-on-arxiv
+  - after-you-submit
+---
+
+The format question trips up many first-time authors. Some upload a beautiful PDF only to have it rejected; others upload LaTeX source that compiles on their laptop but fails on arXiv. This article summarises what arXiv's help pages say so you can prepare the right files the first time.
+
+Endorse Commons is independent and not affiliated with arXiv. Always read the current arXiv pages linked above, because the processing system changes over time.
+
+## The short answer
+
+- **If you wrote it in TeX/LaTeX:** submit the **source files**, not the PDF.
+- **If you wrote it in something else (such as Word):** submit a **single PDF**.
+
+arXiv states that it prefers TeX/LaTeX submissions and that it does not accept DVI, PS, or **PDF created from TeX/LaTeX source**. Such PDFs will typically be rejected, with exceptions granted case by case. arXiv's "Why submit the TeX/LaTeX source?" page explains its reasons in more detail.
+
+## Submitting TeX/LaTeX source
+
+### What changed recently
+
+In April 2025, per arXiv, it changed how TeX submissions are processed, retiring the long-used "AutoTeX" system in favour of a simpler process that converts TeX to PDF. arXiv says you must carefully check the resulting PDF and will be required to view it during submission before you can complete it.
+
+### Files to include
+
+- **All your .tex files** and any custom style or class files your paper needs.
+- **Figures.** arXiv says that if you use PDFLaTeX, figures must be .pdf, .jpg or .png; if you use plain (La)TeX, figures must be .ps or .eps.
+- **Your .bbl file.** Processed BibTeX (.bbl) files are an exception to the rule that intermediate files shouldn't be uploaded. The **.bbl name must match your main .tex file name**. If you use biblatex, don't mix a .bbl produced by Biber with one expected from BibTeX, or vice versa.
+- **Ancillary files (optional).** Code, data or extra images can go in a directory named `anc` at the root of your .tar.gz or .zip package. arXiv notes ancillary files are only supported with TeX/PDFLaTeX submissions, not PDF-only ones.
+
+### Before you upload
+
+- Compile from a clean folder containing only the files you plan to upload.
+- Remove unused figures and auxiliary files.
+- Check arXiv's "Common mistakes" page; it lists frequent causes of failed processing.
+- After upload, the submission page shows whether compilation succeeded and the log. Read the log, and look at every page of the preview PDF.
+
+## Submitting a PDF
+
+If your paper was not produced with TeX, you'll submit a PDF. arXiv's requirements include:
+
+- **One PDF file only**, containing all text and figures. arXiv does not permit multiple PDFs, or a PDF combined with other file types.
+- **Fonts:** include all standard and non-standard fonts, and use outline (TrueType/Type1) rather than bitmap (Type3) fonts.
+- **No embedded JavaScript**, animations, movies or HTML. arXiv says submissions with embedded JavaScript are automatically rejected for security reasons.
+- **No scanned documents**, in any format. Scans also prevent machine-readable text extraction.
+
+arXiv's PDF page includes step-by-step guidance for exporting a PDF from Microsoft Word, including choosing the option described as best for electronic distribution and accessibility.
+
+## File size
+
+arXiv has size limits and a dedicated [Oversized Submissions](https://info.arxiv.org/help/sizes.html) page describing how to slim down figures and when to contact arXiv about an exception. We are deliberately not quoting a number here, because limits can change. Common fixes include compressing images, using vector graphics sensibly, and removing unused files.
+
+## Bilingual papers
+
+If your paper includes a non-English version, the English version must be complete and should come first. See [English-language requirement](/learn/english-language-requirement).
+
+## A pre-flight checklist
+
+1. Right format: TeX source for TeX papers, single PDF otherwise.
+2. Figures in the formats your TeX engine expects.
+3. .bbl included and correctly named (TeX).
+4. Fonts embedded as outline fonts (PDF).
+5. No scans, no embedded scripts or media.
+6. Preview PDF checked page by page.
+7. License decided in advance (see [Licenses on arXiv](/learn/licenses-on-arxiv)).
+
+Reviewers on Endorse Commons can also look at your compiled draft and point out anything that looks broken before you submit. [Start a paper](/app/papers/new) when you're ready.

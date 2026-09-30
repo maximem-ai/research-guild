@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, ui-serif, serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --color-accent-50: #eef7f6;
+  --color-accent-100: #d5ecea;
+  --color-accent-500: #2a8a82;
+  --color-accent-600: #1f6f69;
+  --color-accent-700: #195a55;
+  --color-accent-300: #7cc4bc;
+}
+
+:root {
+  --bg: #fbfaf7;
+  --fg: #1c1b19;
+  --muted: #5d5a54;
+  --card: #ffffff;
+  --border: #e4e0d8;
+  --soft: #f3f1ec;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #131312;
+    --fg: #ecebe7;
+    --muted: #a8a49c;
+    --card: #1b1b19;
+    --border: #2f2e2b;
+    --soft: #22221f;
+    color-scheme: dark;
+  }
+}
+
+html { background: var(--bg); color: var(--fg); }
+body { font-family: var(--font-sans); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { font-family: var(--font-serif); letter-spacing: -0.01em; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--color-accent-500); outline-offset: 2px; border-radius: 4px; }
+
+@layer components {
+  .container-page { @apply mx-auto w-full max-w-5xl px-4 sm:px-6; }
+  .muted { color: var(--muted); }
+  .card { background: var(--card); border: 1px solid var(--border); @apply rounded-xl p-5; }
+  .soft { background: var(--soft); }
+  .border-theme { border-color: var(--border); }
+  .link { @apply underline decoration-1 underline-offset-2 hover:text-accent-600 dark:hover:text-accent-300; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50; border: 1px solid var(--border); background: var(--card); }
+  .btn:hover:not(:disabled) { background: var(--soft); }
+  .btn-primary { @apply bg-accent-600 text-white hover:bg-accent-700; border-color: transparent; }
+  .btn-primary:hover:not(:disabled) { @apply bg-accent-700; }
+  .btn-danger { @apply text-red-700 dark:text-red-400; }
+  .btn-sm { @apply px-3 py-1.5 text-xs; }
+  .input { @apply w-full rounded-lg px-3 py-2 text-sm; background: var(--card); border: 1px solid var(--border); }
+  .input:focus { @apply outline-none ring-2 ring-accent-500; }
+  .label { @apply mb-1 block text-sm font-medium; }
+  .hint { @apply mt-1 text-xs; color: var(--muted); }
+  .badge { @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium; background: var(--soft); border: 1px solid var(--border); }
+  .badge-accent { @apply bg-accent-50 text-accent-700 dark:bg-accent-700/30 dark:text-accent-100; border-color: transparent; }
+  .badge-warn { @apply bg-amber-100 text-amber-900 dark:bg-amber-900/40 dark:text-amber-100; border-color: transparent; }
+  .badge-ok { @apply bg-emerald-100 text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-100; border-color: transparent; }
+  .badge-bad { @apply bg-red-100 text-red-900 dark:bg-red-900/40 dark:text-red-100; border-color: transparent; }
+  .alert { @apply rounded-lg px-4 py-3 text-sm; border: 1px solid var(--border); background: var(--soft); }
+  .alert-error { @apply border-red-300 bg-red-50 text-red-900 dark:border-red-800 dark:bg-red-950/50 dark:text-red-100; }
+  .alert-ok { @apply border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-100; }
+  .h1 { @apply text-3xl font-semibold sm:text-4xl; }
+  .h2 { @apply text-xl font-semibold; }
+}
+
+/* learning-center article typography (no client JS) */
+.prose-learn { @apply text-[1.05rem] leading-relaxed; }
+.prose-learn h2 { @apply mt-10 mb-3 text-2xl font-semibold; }
+.prose-learn h3 { @apply mt-6 mb-2 text-lg font-semibold; }
+.prose-learn p { @apply my-4; }
+.prose-learn ul { @apply my-4 list-disc pl-6; }
+.prose-learn ol { @apply my-4 list-decimal pl-6; }
+.prose-learn li { @apply my-1; }
+.prose-learn a { @apply underline decoration-1 underline-offset-2 hover:text-accent-600; }
+.prose-learn blockquote { @apply my-4 border-l-4 pl-4 italic; border-color: var(--border); color: var(--muted); }
+.prose-learn code { @apply rounded px-1 py-0.5 text-sm; background: var(--soft); }
+.prose-learn table { @apply my-4 w-full text-sm; border-collapse: collapse; }
+.prose-learn th, .prose-learn td { @apply px-3 py-2 text-left align-top; border: 1px solid var(--border); }
+.prose-learn strong { @apply font-semibold; }
