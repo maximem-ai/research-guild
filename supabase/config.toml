@@ -1,0 +1,74 @@
+# Supabase CLI config for local development (`supabase start`) and CI.
+# Production auth providers are configured in the Supabase dashboard (see README).
+project_id = "endorse-commons"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[realtime]
+enabled = true
+
+[studio]
+enabled = true
+port = 54323
+
+[inbucket]
+enabled = false
+
+[storage]
+enabled = true
+file_size_limit = "10MiB"
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000/auth/callback", "http://127.0.0.1:3000/auth/callback"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+enable_signup = true
+
+# Email/password exists ONLY so local end-to-end tests can create sessions.
+# Keep the Email provider DISABLED in production (no magic links, no email service).
+[auth.email]
+enable_signup = true
+enable_confirmations = false
+double_confirm_changes = false
+
+[auth.external.linkedin_oidc]
+enabled = true
+client_id = "env(SUPABASE_AUTH_LINKEDIN_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_LINKEDIN_SECRET)"
+
+[auth.external.google]
+enabled = true
+client_id = "env(SUPABASE_AUTH_GOOGLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_GOOGLE_SECRET)"
+skip_nonce_check = false
+
+[auth.external.github]
+enabled = true
+client_id = "env(SUPABASE_AUTH_GITHUB_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_GITHUB_SECRET)"
+
+[edge_runtime]
+enabled = true
+policy = "oneshot"
+
+[functions.embed]
+verify_jwt = true
+
+[functions.retention]
+verify_jwt = true
