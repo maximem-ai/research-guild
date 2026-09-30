@@ -43,6 +43,13 @@ export default function About() {
         The code is <a href={GITHUB_URL}>open source on GitHub</a> under the AGPL-3.0, and the learning center is CC BY 4.0. See our{" "}
         <Link href="/privacy">privacy promise</Link>.
       </p>
+      <h2>Who runs it</h2>
+      <p>
+        {APP_NAME} is built and maintained by the team at <a href="https://maximem.ai">Maximem</a>. The code is{" "}
+        <a href={GITHUB_URL}>open source</a>, decisions follow our public{" "}
+        <a href={`${GITHUB_URL}/blob/main/GOVERNANCE.md`}>governance process</a>, and Maximem never uses manuscripts for any
+        product, analytics or model training.
+      </p>
     </article>
   );
 }
