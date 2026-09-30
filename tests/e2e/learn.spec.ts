@@ -30,7 +30,26 @@ test("sitemap, robots and public readiness check", async ({ page, request }) => 
   await page.getByRole("combobox").nth(1).selectOption("cs.AI");
   await page.getByRole("button", { name: "Check my readiness" }).click();
   await expect(page.getByText("Not quite yet")).toBeVisible();
-  await expect(page.getByText(/passed peer review/).first()).toBeVisible();
+  await expect(page.locator(".alert").getByText(/passed peer review/)).toBeVisible();
+});
+
+test("glossary page and inline definitions", async ({ page }) => {
+  await page.goto("/learn/glossary");
+  await expect(page.getByRole("heading", { level: 1, name: "Glossary" })).toBeVisible();
+  await expect(page.locator("#endorsement-code")).toContainText("Endorsement code");
+  const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((b) => JSON.parse(b));
+  expect(ld.find((d) => d["@type"] === "DefinedTermSet").hasDefinedTerm.length).toBeGreaterThan(30);
+
+  await page.goto("/learn/what-is-arxiv-endorsement");
+  const term = page.locator(".prose-learn .term").first();
+  await expect(term.locator(".term-tip")).toBeHidden();
+  await term.locator(".term-link").hover();
+  await expect(term.locator(".term-tip")).toBeVisible();
+
+  await page.goto("/learn/readiness-check");
+  const hint = page.locator(".term", { hasText: "What's an endorsement code?" });
+  await hint.locator(".term-link").focus();
+  await expect(hint.locator(".term-tip")).toContainText("arXiv gives you");
 });
 
 test("app routes require sign-in", async ({ page }) => {

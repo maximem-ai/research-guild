@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Term } from "@/components/Term";
 import { APP_NAME } from "@/lib/env";
 import { getPledgeStats } from "@/lib/public-data";
 
@@ -11,12 +12,12 @@ const GOALS = [
   { title: "Protect the commons", body: "Keep quality high so open preprint servers stay open for everyone. No endorsement mills." },
 ];
 
-const STEPS = [
-  { n: 1, title: "Learn and check readiness", body: "Read the free learning center and take the 7-question arXiv readiness check." },
-  { n: 2, title: "Post your abstract", body: "Only your abstract is shown, and only to signed-in members. Endorsers in your category opt in." },
-  { n: 3, title: "Share the full paper", body: "Choose who reads it. At most three reviewers hold your paper at once; others wait in a fair queue." },
-  { n: 4, title: "Get feedback rounds", body: "Improve your draft with people who have published. Upload new versions as you go." },
-  { n: 5, title: "Endorsement on arXiv", body: "A reviewer who read the full paper may endorse you on arXiv's own form. We never touch arXiv accounts." },
+const STEPS: { n: number; title: string; body: React.ReactNode }[] = [
+  { n: 1, title: "Learn and check readiness", body: <>Read the free learning center and take the 7-question arXiv <Term slug="readiness-check">readiness check</Term>.</> },
+  { n: 2, title: "Post your abstract", body: <>Only your <Term slug="abstract">abstract</Term> is shown, and only to signed-in members. <Term slug="endorser">Endorsers</Term> in your <Term slug="category">category</Term> opt in.</> },
+  { n: 3, title: "Share the full paper", body: <>Choose who reads your <Term slug="full-paper">full paper</Term>. At most three reviewers hold it at once; others wait on a fair <Term slug="waitlist">waitlist</Term>.</> },
+  { n: 4, title: "Get feedback rounds", body: <>Improve your draft in <Term slug="feedback-round">feedback rounds</Term> with people who have published. Upload new versions as you go.</> },
+  { n: 5, title: "Endorsement on arXiv", body: <>A reviewer who read the full paper may give you an <Term slug="endorsement">endorsement</Term> on <Term slug="arxiv">arXiv</Term>&apos;s own form. We never touch arXiv accounts.</> },
 ];
 
 export default async function Home() {

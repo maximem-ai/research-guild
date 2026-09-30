@@ -1,3 +1,4 @@
+import { Term } from "@/components/Term";
 import Link from "next/link";
 import { ActionForm, SubmitButton } from "@/components/ActionForm";
 import { requireProfile } from "@/lib/auth";
@@ -23,11 +24,11 @@ export default async function Feed() {
     <div>
       <h1 className="h1">Abstract feed</h1>
       <p className="mt-2 max-w-2xl text-sm muted">
-        Abstracts matched to your categories and topics. Accepting means you&apos;re willing to read the full paper if the author shares it.
+        <Term slug="abstract">Abstracts</Term> matched to your <Term slug="category">categories</Term> and <Term slug="sub-topic">sub-topics</Term>. Accepting means you&apos;re willing to read the <Term slug="full-paper">full paper</Term> if the author shares it.
         Abstracts are confidential to signed-in members; please don&apos;t share them.
       </p>
       {(caps ?? []).length === 0 && (
-        <p className="alert mt-4 text-sm">You can browse, but to accept abstracts you need an endorser capability. <Link className="link" href="/app/settings#endorse">Add a category</Link>.</p>
+        <p className="alert mt-4 text-sm">You can browse, but to accept abstracts you need an <Term slug="capability">endorser capability</Term>. <Link className="link" href="/app/settings#endorse">Add a category</Link>.</p>
       )}
       {error && <p className="alert alert-error mt-4">Couldn&apos;t load your feed.</p>}
       {rows.length === 0 && !error && <p className="card mt-6 text-sm muted">Nothing new right now. Follow more sub-topics in settings to widen your feed.</p>}

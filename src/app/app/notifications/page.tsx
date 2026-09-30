@@ -24,7 +24,7 @@ export default async function Notifications() {
           {rows.map((n) => (
             <li key={n.id} className={`px-5 py-3 ${n.read_at ? "" : "soft"}`}>
               <Link href={notificationHref(n, myEngagements)} className="block no-underline">
-                <p className="text-sm">{!n.read_at && <span className="mr-2 inline-block h-2 w-2 rounded-full bg-accent-600" aria-label="unread" />}{notificationText(n)}</p>
+                <p className="text-sm">{!n.read_at && <span className="mr-2 inline-block h-2 w-2 rounded-full bg-[var(--brand-orange)]" aria-label="unread" />}{notificationText(n)}</p>
                 <p className="text-xs muted">{fmtDateTime(n.created_at)}</p>
               </Link>
             </li>

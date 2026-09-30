@@ -4,6 +4,7 @@ import { useActionState, useMemo, useState } from "react";
 import { READINESS_ITEMS } from "@/lib/readiness";
 import type { Category, Paper, Topic } from "@/lib/types";
 import { SubmitButton, type ActionState } from "./ActionForm";
+import { Term, TermHint } from "./Term";
 
 type Action = (prev: ActionState, fd: FormData) => Promise<ActionState>;
 
@@ -39,14 +40,14 @@ export function PaperForm({ action, categories, topics, paper, paperTopics = [],
         <input id="title" name="title" className="input" required minLength={10} maxLength={300} defaultValue={paper?.title} />
       </div>
       <div>
-        <label className="label" htmlFor="abstract">Abstract *</label>
+        <div className="flex items-baseline"><label className="label" htmlFor="abstract">Abstract *</label><TermHint slug="abstract" /></div>
         <textarea id="abstract" name="abstract" className="input" rows={9} required minLength={200} maxLength={2500}
           defaultValue={paper?.abstract} onChange={(e) => setAbstractLen(e.target.value.length)} />
         <p className="hint">{abstractLen}/2500 characters (minimum 200). Only signed-in members see abstracts; they are never indexed.</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="label" htmlFor="primary_category">Primary category *</label>
+          <div className="flex items-baseline"><label className="label" htmlFor="primary_category">Primary category *</label><TermHint slug="primary-category" /></div>
           <select id="primary_category" name="primary_category" className="input" value={primary} disabled={locked}
             onChange={(e) => { setPrimary(e.target.value); setChosen([]); }}>
             {categories.map((c) => <option key={c.code} value={c.code}>{c.code} — {c.name}</option>)}
@@ -55,7 +56,7 @@ export function PaperForm({ action, categories, topics, paper, paperTopics = [],
           <p className="hint">{primaryInfo?.name}. Unsure? <Link className="link" href="/learn/choosing-primary-category" target="_blank">Choosing your category</Link></p>
         </div>
         <div>
-          <label className="label" htmlFor="paper_type">Paper type *</label>
+          <div className="flex items-baseline"><label className="label" htmlFor="paper_type">Paper type *</label></div>
           <select id="paper_type" name="paper_type" className="input" value={type} disabled={locked} onChange={(e) => setType(e.target.value)}>
             <option value="original_research">Original research</option>
             <option value="survey_review">Survey / review</option>
@@ -63,18 +64,24 @@ export function PaperForm({ action, categories, topics, paper, paperTopics = [],
             <option value="other">Other</option>
           </select>
           {locked && <input type="hidden" name="paper_type" value={type} />}
+          <p className="hint">
+            <Term slug="original-research">Original research</Term> reports new results. A <Term slug="survey-paper">survey</Term> summarises
+            existing work. A <Term slug="position-paper">position paper</Term> argues for a viewpoint.
+          </p>
         </div>
       </div>
       {needsProof && (
         <div className="alert">
-          <p className="text-sm">arXiv CS only accepts review/survey and position papers that have already passed peer review.{" "}
+          <p className="text-sm">arXiv CS only accepts review/survey and position papers that have already passed <Term slug="peer-review">peer review</Term>.{" "}
             <Link className="link" href="/learn/research-survey-position-papers" target="_blank">Why?</Link></p>
           <label className="label mt-2" htmlFor="peer_review_proof_url">Peer-review proof (URL or DOI) *</label>
           <input id="peer_review_proof_url" name="peer_review_proof_url" className="input" required defaultValue={paper?.peer_review_proof_url ?? ""} />
+          <p className="hint">For example the published version&apos;s <Term slug="doi">DOI</Term>, or the accepted paper&apos;s page on the venue&apos;s site.</p>
         </div>
       )}
       <fieldset>
         <legend className="label">Cross-list categories <span className="font-normal muted">(optional, up to 5)</span></legend>
+        <p className="hint -mt-1 mb-2">Add a category only if readers there would genuinely want the paper. <TermHint slug="cross-listing" label="What is cross-listing?" /></p>
         <div className="flex max-h-40 flex-wrap gap-2 overflow-y-auto rounded-lg border border-theme p-3">
           {categories.filter((c) => c.code !== primary).map((c) => (
             <label key={c.code} className="badge cursor-pointer gap-1">
@@ -86,6 +93,7 @@ export function PaperForm({ action, categories, topics, paper, paperTopics = [],
       </fieldset>
       <fieldset>
         <legend className="label">Sub-topics * <span className="font-normal muted">(pick 1–3)</span></legend>
+        <p className="hint -mt-1 mb-2">Endorsers follow sub-topics, so these decide who sees your abstract first. <TermHint slug="sub-topic" /></p>
         {available.length === 0 ? (
           <p className="hint">No curated sub-topics for this category yet; endorsers will match on category.</p>
         ) : (
@@ -129,12 +137,12 @@ export function PaperForm({ action, categories, topics, paper, paperTopics = [],
               </div>
             );
           })}
-          <p className="text-sm">4. Primary category: <strong>{primary}</strong> (chosen above)</p>
+          <p className="text-sm">4. <Term slug="primary-category">Primary category</Term>: <strong>{primary}</strong> (chosen above)</p>
           {(["own_work", "has_endorsement_code", "no_mass_asking"] as const).map((id, i) => {
             const item = READINESS_ITEMS.find((x) => x.id === id)!;
             return (
               <div key={id}>
-                <p className="text-sm">{i + 5}. {item.question}</p><YesNo name={`rc_${id}`} />
+                <p className="text-sm">{i + 5}. {item.question}{item.term && <TermHint slug={item.term} />}</p><YesNo name={`rc_${id}`} />
                 <p className="hint">{item.blocking ? "If not: " : ""}{item.failReason} <Link className="link" href={`/learn/${item.article}`} target="_blank">Learn more</Link></p>
               </div>
             );

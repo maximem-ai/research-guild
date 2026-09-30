@@ -34,8 +34,54 @@ function rehypeExternalLinks() {
   };
 }
 
+// Inline definitions: wrap the first mention of each glossary term in an article (max 10 per article)
+// with the same markup as the <Term> component. Skips headings, links and code.
+const glossary = JSON.parse(fs.readFileSync(path.join(dir, "glossary.json"), "utf8")).terms;
+const AUTO_SKIP = new Set(["arxiv", "reviewer"]); // "arxiv" is everywhere; "reviewer" in articles usually means a journal reviewer
+const patterns = glossary.filter((t) => !AUTO_SKIP.has(t.slug))
+  .flatMap((t) => [t.term.replace(/[“”"]/g, "").replace(/\s*\(.*\)$/, ""), ...t.aliases].map((p) => ({ p, t })))
+  .filter((x) => x.p.length >= 3)
+  .sort((a, b) => b.p.length - a.p.length);
+const esc = (s) => s.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");
+const termRe = new RegExp(`(?<![\\w-])(${patterns.map((x) => esc(x.p)).join("|")})(?![\\w-])`, "gi");
+const lookup = (m) => patterns.find((x) => x.p.toLowerCase() === m.toLowerCase()).t;
+
+function rehypeGlossary() {
+  return (tree, file) => {
+    const used = new Set();
+    let n = 0;
+    const SKIP = new Set(["a", "h1", "h2", "h3", "h4", "code", "pre"]);
+    const walk = (node) => {
+      if (node.type === "element" && SKIP.has(node.tagName)) return;
+      if (!node.children) return;
+      const out = [];
+      for (const child of node.children) {
+        if (child.type !== "text" || n >= 10) { walk(child); out.push(child); continue; }
+        let last = 0; const v = child.value; termRe.lastIndex = 0; let m;
+        while ((m = termRe.exec(v)) && n < 10) {
+          const t = lookup(m[1]);
+          if (used.has(t.slug)) continue;
+          used.add(t.slug); n++;
+          if (m.index > last) out.push({ type: "text", value: v.slice(last, m.index) });
+          const id = `def-${t.slug}`;
+          out.push({ type: "element", tagName: "span", properties: { className: ["term"] }, children: [
+            { type: "element", tagName: "a", properties: { href: `/learn/glossary#${t.slug}`, className: ["term-link"], ariaDescribedBy: id }, children: [{ type: "text", value: m[1] }] },
+            { type: "element", tagName: "span", properties: { role: "tooltip", id, className: ["term-tip"] }, children: [
+              { type: "element", tagName: "strong", properties: {}, children: [{ type: "text", value: t.term }] },
+              { type: "text", value: t.definition }] }] });
+          last = m.index + m[1].length;
+        }
+        if (last < v.length) out.push({ type: "text", value: v.slice(last) });
+      }
+      node.children = out;
+    };
+    walk(tree);
+    file.data.terms = [...used];
+  };
+}
+
 const processor = unified().use(remarkParse).use(remarkGfm).use(remarkRehype)
-  .use(rehypeSlug).use(rehypeExternalLinks).use(rehypeStringify);
+  .use(rehypeSlug).use(rehypeGlossary).use(rehypeExternalLinks).use(rehypeStringify);
 
 const errors = [];
 const articles = [];
@@ -48,7 +94,8 @@ for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".mdx") || f.end
   if (!Array.isArray(data.sources) || data.sources.length === 0) errors.push(`${file}: needs sources`);
   for (const s of data.sources ?? []) if (!OFFICIAL.test(s.url)) errors.push(`${file}: non-arXiv source ${s.url}`);
   if (/^#\s/m.test(content)) errors.push(`${file}: use ## headings; the title renders as H1`);
-  const html = String(await processor.process(content));
+  const vfile = await processor.process(content);
+  const html = String(vfile);
   const headings = [...content.matchAll(/^##\s+(.+)$/gm)].map((m) => m[1].trim());
   articles.push({
     slug,
@@ -64,10 +111,17 @@ for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".mdx") || f.end
     related: data.related ?? [],
     headings,
     wordCount: content.split(/\s+/).filter(Boolean).length,
+    terms: vfile.data.terms ?? [],
     html,
   });
 }
 const slugs = new Set(articles.map((a) => a.slug));
+const termSlugs = new Set();
+for (const t of glossary) {
+  if (termSlugs.has(t.slug)) errors.push(`glossary: duplicate slug ${t.slug}`);
+  termSlugs.add(t.slug);
+  if (t.article && !slugs.has(t.article)) errors.push(`glossary: ${t.slug} links unknown article ${t.article}`);
+}
 for (const a of articles) for (const r of a.related) if (!slugs.has(r)) errors.push(`${a.slug}: unknown related slug ${r}`);
 if (errors.length) {
   console.error("Learning center content errors:\n" + errors.map((e) => "  - " + e).join("\n"));

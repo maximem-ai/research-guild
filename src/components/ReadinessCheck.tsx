@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { CATEGORIES } from "@/lib/categories";
 import { evaluateReadiness, READINESS_ITEMS, type ReadinessAnswers } from "@/lib/readiness";
+import { Term, TermHint } from "./Term";
 
 const yesNo = (name: keyof ReadinessAnswers, set: (k: keyof ReadinessAnswers, v: boolean) => void, value?: boolean) => (
   <div className="mt-2 flex gap-4 text-sm">
@@ -30,9 +31,13 @@ export function ReadinessCheck() {
           <option value="position">Position paper</option>
           <option value="other">Other</option>
         </select>
+        <p className="hint">
+          <Term slug="original-research">Original research</Term> reports new results. A <Term slug="survey-paper">survey</Term> summarises
+          existing work. A <Term slug="position-paper">position paper</Term> argues for a viewpoint.
+        </p>
         {needsProof && (
           <div className="mt-3">
-            <p className="text-sm">Has it already passed peer review (e.g. accepted at a journal or conference)?</p>
+            <p className="text-sm">Has it already passed <Term slug="peer-review">peer review</Term> (e.g. accepted at a journal or conference)?</p>
             {yesNo("peer_review_proof", set, a.peer_review_proof)}
           </div>
         )}
@@ -45,10 +50,10 @@ export function ReadinessCheck() {
           <option value="">Choose…</option>
           {CATEGORIES.map((c) => <option key={c.code} value={c.code}>{c.code} — {c.name}</option>)}
         </select>
-        <p className="hint">Not sure? Read <Link className="link" href="/learn/choosing-primary-category">choosing your primary category</Link>.</p>
+        <p className="hint">The one <Term slug="category">category</Term> that best fits your main contribution. Not sure? Read <Link className="link" href="/learn/choosing-primary-category">choosing your primary category</Link>.</p>
       </fieldset>
       <fieldset className="card"><legend className="font-semibold">5. Are you an author submitting your own work?</legend>{yesNo("own_work", set, a.own_work)}</fieldset>
-      <fieldset className="card"><legend className="font-semibold">6. Do you already have an endorsement code from arXiv for this category?</legend>{yesNo("has_endorsement_code", set, a.has_endorsement_code)}</fieldset>
+      <fieldset className="card"><legend className="font-semibold">6. Do you already have an endorsement code from arXiv for this category?</legend><TermHint slug="endorsement-code" label="What's an endorsement code?" />{yesNo("has_endorsement_code", set, a.has_endorsement_code)}</fieldset>
       <fieldset className="card"><legend className="font-semibold">7. Will you avoid mass-asking endorsers elsewhere while your abstract is open?</legend>{yesNo("no_mass_asking", set, a.no_mass_asking)}</fieldset>
       <button type="submit" className="btn btn-primary">Check my readiness</button>
 

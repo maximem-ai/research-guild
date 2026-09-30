@@ -27,7 +27,7 @@ export function NotificationBell({ userId, initialUnread }: { userId: string; in
         <path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
       </svg>
       {unread > 0 && (
-        <span className="absolute -right-0.5 -top-0.5 min-w-5 rounded-full bg-accent-600 px-1 text-center text-[11px] font-semibold leading-5 text-white">
+        <span className="absolute -right-0.5 -top-0.5 min-w-5 rounded-full bg-[var(--brand-orange)] px-1 text-center text-[11px] font-bold leading-5 text-black">
           {unread > 99 ? "99+" : unread}
         </span>
       )}

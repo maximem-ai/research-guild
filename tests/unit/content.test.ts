@@ -26,3 +26,31 @@ describe("categories mirror", () => {
     expect(CATEGORIES.map((c) => c.code)).toEqual(seeded);
   });
 });
+
+describe("glossary", async () => {
+  const { GLOSSARY, GLOSSARY_GROUPS, getTerm } = await import("@/lib/glossary");
+  it("has unique slugs, known groups and real article links", () => {
+    expect(new Set(GLOSSARY.map((t) => t.slug)).size).toBe(GLOSSARY.length);
+    const groups = new Set(GLOSSARY_GROUPS.map((g) => g.id));
+    const slugs = new Set(articles.map((a) => a.slug));
+    for (const t of GLOSSARY) {
+      expect(groups.has(t.group)).toBe(true);
+      expect(t.definition.length).toBeGreaterThan(40);
+      if (t.article) expect(slugs.has(t.article)).toBe(true);
+    }
+  });
+  it("covers the terms first-time authors meet", () => {
+    for (const s of ["endorsement", "endorsement-code", "primary-category", "cross-listing", "original-research", "survey-paper",
+      "position-paper", "peer-review", "arxiv-id", "negative-endorsement", "waitlist", "feedback-round"]) expect(() => getTerm(s)).not.toThrow();
+  });
+  it("auto-links first mentions in articles, once per term, never inside headings", () => {
+    const linked = articles.filter((a) => a.html.includes('class="term-link"'));
+    expect(linked.length).toBe(articles.length);
+    for (const a of articles) {
+      for (const slug of (a as unknown as { terms: string[] }).terms) {
+        expect(a.html.split(`href="/learn/glossary#${slug}"`).length - 1).toBe(1);
+      }
+      expect(a.html).not.toMatch(/<h[1-4][^>]*>[^<]*<span class="term"/);
+    }
+  });
+});

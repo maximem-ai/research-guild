@@ -1,3 +1,4 @@
+import { TermHint } from "@/components/Term";
 import { ActionForm, SubmitButton } from "@/components/ActionForm";
 import { saveProfileAction } from "@/app/app/actions";
 import { MIN_AGE } from "@/lib/env";
@@ -44,11 +45,11 @@ export function ProfileForm({ profile, categories, topics, myCategories, myTopic
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="label" htmlFor="google_scholar_url">Google Scholar URL</label>
+          <div className="flex items-baseline"><label className="label" htmlFor="google_scholar_url">Google Scholar URL</label><TermHint slug="google-scholar" /></div>
           <input id="google_scholar_url" name="google_scholar_url" className="input" type="url" defaultValue={profile?.google_scholar_url ?? ""} />
         </div>
         <div>
-          <label className="label" htmlFor="orcid">ORCID iD</label>
+          <div className="flex items-baseline"><label className="label" htmlFor="orcid">ORCID iD</label><TermHint slug="orcid" /></div>
           <input id="orcid" name="orcid" className="input" placeholder="0000-0000-0000-0000" pattern="\d{4}-\d{4}-\d{4}-\d{3}[\dXx]"
             defaultValue={profile?.orcid ?? ""} />
           <p className="hint">Optional. Checked with ORCID&apos;s checksum.</p>
@@ -66,6 +67,7 @@ export function ProfileForm({ profile, categories, topics, myCategories, myTopic
 
       <fieldset>
         <legend className="label">Categories of interest * <span className="font-normal muted">(at least one)</span></legend>
+        <p className="hint -mt-1 mb-2">arXiv&apos;s topic labels, like cs.AI or cs.CL. <TermHint slug="category" label="What's a category?" /></p>
         <div className="max-h-72 space-y-3 overflow-y-auto rounded-lg border border-theme p-3">
           {archives.map((ar) => (
             <div key={ar}>
@@ -85,7 +87,7 @@ export function ProfileForm({ profile, categories, topics, myCategories, myTopic
 
       <fieldset>
         <legend className="label">Sub-topics you follow</legend>
-        <p className="hint mb-2">Used to match abstracts to endorsers. Curated lists exist for the most active categories.</p>
+        <p className="hint mb-2">Used to match abstracts to endorsers. Curated lists exist for the most active categories. <TermHint slug="sub-topic" /></p>
         <div className="max-h-72 space-y-3 overflow-y-auto rounded-lg border border-theme p-3">
           {[...grouped.entries()].map(([cat, ts]) => (
             <div key={cat}>

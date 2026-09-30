@@ -20,6 +20,8 @@ export type ReadinessItem = {
   failReason: string;
   article: string;
   blocking: boolean;
+  /** glossary slug for an inline definition next to the question */
+  term?: string;
 };
 
 export const READINESS_ITEMS: ReadinessItem[] = [
@@ -32,13 +34,13 @@ export const READINESS_ITEMS: ReadinessItem[] = [
   { id: "draft_finished", question: "Is the draft finished — methods, results, and references to current work?", blocking: true,
     failReason: "Endorsers are asked to check the paper engages with current work in the field. Finish the draft first.",
     article: "is-arxiv-right-for-my-paper" },
-  { id: "primary_category", question: "Have you chosen your primary category?", blocking: true,
+  { id: "primary_category", question: "Have you chosen your primary category?", blocking: true, term: "primary-category",
     failReason: "Pick the category that best fits your main contribution; the endorsement is for that category.",
     article: "choosing-primary-category" },
   { id: "own_work", question: "Are you an author of this paper, submitting it yourself?", blocking: true,
     failReason: "Only authors can post their own work here.",
     article: "what-is-arxiv-endorsement" },
-  { id: "has_endorsement_code", question: "Do you already have an endorsement code from arXiv for this category?", blocking: false,
+  { id: "has_endorsement_code", question: "Do you already have an endorsement code from arXiv for this category?", blocking: false, term: "endorsement-code",
     failReason: "Not a blocker: you can post now, but you'll need the code before sharing your full paper.",
     article: "getting-your-endorsement-code" },
   { id: "no_mass_asking", question: "Will you avoid mass-asking endorsers elsewhere while this is open?", blocking: true,

@@ -1,3 +1,4 @@
+import { Term } from "@/components/Term";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ActionForm, SubmitButton } from "@/components/ActionForm";
@@ -87,7 +88,7 @@ export default async function ReviewPage({ params, searchParams }: {
 
         {["reviewing", "endorsed_pending_author", "endorsed"].includes(e.state) && (
           <section className="card">
-            <h2 className="h2">Full paper</h2>
+            <h2 className="h2"><Term slug="full-paper">Full paper</Term></h2>
             <p className="mt-1 text-sm muted">Confidential. Opens a 5-minute private link. Please don&apos;t download to shared drives, share, or paste it into AI tools.{" "}
               <Link className="link" href="/learn/manuscript-confidentiality">Confidentiality for reviewers</Link></p>
             <ul className="mt-3 space-y-1 text-sm">
@@ -102,7 +103,7 @@ export default async function ReviewPage({ params, searchParams }: {
 
         {(messagesQ.data ?? []).length > 0 || reviewing || e.state === "endorsed_pending_author" ? (
           <section className="card">
-            <h2 className="h2 mb-3">Feedback · {e.feedback_rounds} round{e.feedback_rounds === 1 ? "" : "s"}</h2>
+            <h2 className="h2 mb-3">Feedback · {e.feedback_rounds} <Term slug="feedback-round">round{e.feedback_rounds === 1 ? "" : "s"}</Term></h2>
             <p className="mb-3 text-xs muted">The first 3 rounds earn karma (+3 each). <Link className="link" href="/learn/giving-useful-feedback">Giving useful feedback</Link></p>
             <FeedbackThread engagementId={e.id} paperId={paper.id} messages={(messagesQ.data ?? []) as FeedbackMessage[]} names={names}
               meId={profile.id} canPost={reviewing || e.state === "endorsed_pending_author"} versions={live}
@@ -160,10 +161,10 @@ export default async function ReviewPage({ params, searchParams }: {
               <div className="border-t border-theme pt-4">
                 <h3 className="text-sm font-semibold">Endorse</h3>
                 {!opened || !checked ? (
-                  <p className="mt-1 text-xs muted">Unlocks after both checks. The endorsement code appears once you&apos;ve opened the full paper.</p>
+                  <p className="mt-1 text-xs muted">Unlocks after both checks. The <Term slug="endorsement-code">endorsement code</Term> appears once you&apos;ve opened the full paper.</p>
                 ) : endorseUrl ? (
                   <div className="mt-2 space-y-2 text-sm">
-                    <p>Endorsement code: <strong className="font-mono">{code}</strong></p>
+                    <p><Term slug="endorsement-code">Endorsement code</Term>: <strong className="font-mono">{code}</strong></p>
                     <a className="btn btn-primary w-full" href={endorseUrl} target="_blank" rel="noopener noreferrer">1. Endorse on arXiv ↗</a>
                     <ActionForm action={recordEndorsedAction} className="space-y-2">
                       <input type="hidden" name="engagement_id" value={e.id} />
@@ -192,7 +193,7 @@ export default async function ReviewPage({ params, searchParams }: {
                       </fieldset>
                       <textarea name="reason" className="input" rows={3} placeholder="Add a kind, specific note for the author (e.g. the category to use)" aria-label="Note to author" />
                       <p className="alert text-xs">
-                        <strong>Declines are real votes.</strong> Please also record &ldquo;do not endorse&rdquo; on arXiv&apos;s endorsement form
+                        <strong>Declines are real votes.</strong> Please also record <Term slug="negative-endorsement">&ldquo;do not endorse&rdquo;</Term> on arXiv&apos;s endorsement form
                         {endorseUrl ? <> (<a className="link" href={endorseUrl} target="_blank" rel="noopener noreferrer">open it</a>)</> : ""}.
                         {" "}<Link className="link" href="/learn/how-to-decline-kindly">How to decline kindly</Link>
                       </p>

@@ -3,31 +3,41 @@
 @theme {
   --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, ui-serif, serif;
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --color-accent-50: #eef7f6;
-  --color-accent-100: #d5ecea;
-  --color-accent-500: #2a8a82;
-  --color-accent-600: #1f6f69;
-  --color-accent-700: #195a55;
-  --color-accent-300: #7cc4bc;
+  /* Maximem brand: black + orange. Orange is an accent only (marks, badges, focus, hovers).
+     Change the brand orange here and in --brand-orange below. */
+  --color-accent-50: #fff4ec;
+  --color-accent-100: #ffe3cf;
+  --color-accent-300: #ff9f66;
+  --color-accent-500: #ff6a13;
+  --color-accent-600: #e65a0a;
+  --color-accent-700: #b3460a;
 }
 
 :root {
-  --bg: #fbfaf7;
-  --fg: #1c1b19;
-  --muted: #5d5a54;
+  --brand-black: #0a0a0a;
+  --brand-orange: #ff6a13;
+  --bg: #fafafa;
+  --fg: #0a0a0a;
+  --muted: #5c5c5c;
   --card: #ffffff;
-  --border: #e4e0d8;
-  --soft: #f3f1ec;
+  --border: #e5e5e5;
+  --soft: #f3f3f3;
+  --accent-text: #b3460a;   /* orange dark enough for small text on light backgrounds */
+  --primary: #0a0a0a;
+  --on-primary: #ffffff;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #131312;
-    --fg: #ecebe7;
-    --muted: #a8a49c;
-    --card: #1b1b19;
-    --border: #2f2e2b;
-    --soft: #22221f;
+    --bg: #0a0a0a;
+    --fg: #f2f2f2;
+    --muted: #a3a3a3;
+    --card: #141414;
+    --border: #2a2a2a;
+    --soft: #1b1b1b;
+    --accent-text: #ff8a47;
+    --primary: #f2f2f2;
+    --on-primary: #0a0a0a;
     color-scheme: dark;
   }
 }
@@ -46,11 +56,12 @@
   .card { background: var(--card); border: 1px solid var(--border); @apply rounded-xl p-5; }
   .soft { background: var(--soft); }
   .border-theme { border-color: var(--border); }
-  .link { @apply underline decoration-1 underline-offset-2 hover:text-accent-600 dark:hover:text-accent-300; }
+  .link { @apply underline decoration-1 underline-offset-2; }
+  .link:hover { color: var(--accent-text); }
   .btn { @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50; border: 1px solid var(--border); background: var(--card); }
   .btn:hover:not(:disabled) { background: var(--soft); }
-  .btn-primary { @apply bg-accent-600 text-white hover:bg-accent-700; border-color: transparent; }
-  .btn-primary:hover:not(:disabled) { @apply bg-accent-700; }
+  .btn-primary { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+  .btn-primary:hover:not(:disabled) { background: var(--primary); opacity: .85; box-shadow: inset 0 -2px 0 var(--brand-orange); }
   .btn-danger { @apply text-red-700 dark:text-red-400; }
   .btn-sm { @apply px-3 py-1.5 text-xs; }
   .input { @apply w-full rounded-lg px-3 py-2 text-sm; background: var(--card); border: 1px solid var(--border); }
@@ -59,6 +70,7 @@
   .hint { @apply mt-1 text-xs; color: var(--muted); }
   .badge { @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium; background: var(--soft); border: 1px solid var(--border); }
   .badge-accent { @apply bg-accent-50 text-accent-700 dark:bg-accent-700/30 dark:text-accent-100; border-color: transparent; }
+  .accent-text { color: var(--accent-text); }
   .badge-warn { @apply bg-amber-100 text-amber-900 dark:bg-amber-900/40 dark:text-amber-100; border-color: transparent; }
   .badge-ok { @apply bg-emerald-100 text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-100; border-color: transparent; }
   .badge-bad { @apply bg-red-100 text-red-900 dark:bg-red-900/40 dark:text-red-100; border-color: transparent; }
@@ -77,9 +89,28 @@
 .prose-learn ul { @apply my-4 list-disc pl-6; }
 .prose-learn ol { @apply my-4 list-decimal pl-6; }
 .prose-learn li { @apply my-1; }
-.prose-learn a { @apply underline decoration-1 underline-offset-2 hover:text-accent-600; }
+.prose-learn a { @apply underline decoration-1 underline-offset-2; }
+.prose-learn a:hover { color: var(--accent-text); }
 .prose-learn blockquote { @apply my-4 border-l-4 pl-4 italic; border-color: var(--border); color: var(--muted); }
 .prose-learn code { @apply rounded px-1 py-0.5 text-sm; background: var(--soft); }
 .prose-learn table { @apply my-4 w-full text-sm; border-collapse: collapse; }
 .prose-learn th, .prose-learn td { @apply px-3 py-2 text-left align-top; border: 1px solid var(--border); }
 .prose-learn strong { @apply font-semibold; }
+
+/* Inline definitions: a dotted orange underline; the definition shows on hover or keyboard focus
+   (a bottom sheet on phones). Pure CSS, so it also works in statically rendered articles. */
+.term { position: relative; display: inline; }
+.term-link { text-decoration: underline dotted; text-decoration-color: var(--brand-orange); text-decoration-thickness: 2px;
+  text-underline-offset: 3px; cursor: help; color: inherit; }
+.prose-learn a.term-link { text-decoration: underline dotted; text-decoration-color: var(--brand-orange); }
+.term-tip { display: none; position: absolute; left: 0; top: calc(100% + 6px); z-index: 60; width: max-content; max-width: 320px;
+  padding: 10px 12px; border-radius: 8px; background: var(--brand-black); color: #f2f2f2; border-top: 3px solid var(--brand-orange);
+  font: 400 13px/1.45 var(--font-sans); text-align: left; text-transform: none; letter-spacing: normal; font-style: normal;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25); white-space: normal; }
+.term-tip strong { display: block; margin-bottom: 2px; color: var(--brand-orange); font-weight: 600; }
+.term:hover > .term-tip, .term:focus-within > .term-tip { display: block; }
+@media (prefers-color-scheme: dark) { .term-tip { background: #1f1f1f; border: 1px solid #333; border-top: 3px solid var(--brand-orange); } }
+@media (max-width: 640px) {
+  .term-tip { position: fixed; left: 16px; right: 16px; top: auto; bottom: 16px; max-width: none; width: auto; }
+}
+.term-hint { font-size: .75rem; font-weight: 400; margin-left: .35rem; }

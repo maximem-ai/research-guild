@@ -4,7 +4,7 @@ import { APP_NAME } from "@/lib/env";
 export function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2 font-serif text-lg font-semibold no-underline">
-      <span aria-hidden className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-accent-600 text-sm text-white">EC</span>
+      <span aria-hidden className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[var(--brand-black)] text-sm font-bold text-[var(--brand-orange)] ring-1 ring-[var(--border)]">EC</span>
       {APP_NAME}
     </Link>
   );

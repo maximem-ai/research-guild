@@ -1,3 +1,4 @@
+import { Term } from "@/components/Term";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { supabaseConfigured } from "@/lib/env";
@@ -67,6 +68,7 @@ export default async function KarmaPage({ searchParams }: { searchParams: Promis
       <p className="mt-3 max-w-2xl muted">
         Karma never makes &ldquo;yes&rdquo; more rewarding than &ldquo;no&rdquo;: recording a decision earns the same points whether you
         endorse or decline. There is no karma between users who are co-authors, and mutual-endorsement pairs are flagged for moderators.
+        Endorsers also build a public <Term slug="track-record">track record</Term>.
       </p>
 
       <h2 className="h2 mt-10">How points are earned</h2>

@@ -1,3 +1,4 @@
+import { Term, TermHint } from "@/components/Term";
 import Link from "next/link";
 import { ActionForm, SubmitButton } from "@/components/ActionForm";
 import { OpenAlexFinder } from "@/components/OpenAlexFinder";
@@ -40,7 +41,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
       <div>
         <h1 className="h1">Settings</h1>
         <p className="mt-2 text-sm muted">
-          Karma: <strong>{profile.karma}</strong> ·{" "}
+          <Term slug="karma">Karma</Term>: <strong>{profile.karma}</strong> ·{" "}
           {(badges.data ?? []).map((b) => <span key={b.badge} className="badge badge-accent mr-1">{BADGE_LABEL[b.badge] ?? b.badge}</span>)}
           <Link className="link" href={`/app/u/${profile.handle}`}>View my profile</Link>
         </p>
@@ -67,7 +68,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
       <section className="card" aria-labelledby="pubs-h">
         <h2 id="pubs-h" className="h2">Past papers</h2>
         <p className="mt-1 text-sm muted">
-          Google Scholar has no public API, so we list papers from OpenAlex instead: find your author record and pick it.
+          <Term slug="google-scholar">Google Scholar</Term> has no public API, so we list papers from <Term slug="openalex">OpenAlex</Term> instead: find your author record and pick it.
         </p>
         <div className="mt-4"><OpenAlexFinder defaultName={profile.display_name} /></div>
         {(pubs.data ?? []).length > 0 && (
@@ -84,7 +85,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
       <section id="endorse" className="card scroll-mt-20" aria-labelledby="endorse-h">
         <h2 id="endorse-h" className="h2">Endorsing</h2>
         <p className="mt-2 text-sm muted">
-          arXiv has no API for endorser eligibility, so you self-attest per category and link evidence. Your capability shows as
+          arXiv has no API for <Term slug="endorser">endorser</Term> eligibility, so you self-attest per category and link evidence. Your <Term slug="capability">capability</Term> shows as
           &ldquo;claimed&rdquo; until a paper you endorse here is verified as posted in that category, then it becomes &ldquo;confirmed&rdquo;.
         </p>
         <div className="alert mt-3 text-sm">
@@ -137,7 +138,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
             <div>
               <label className="label" htmlFor="cap-ev">Evidence link</label>
               <input id="cap-ev" name="evidence_url" className="input" required placeholder="https://arxiv.org/auth/show-endorsers/2401.12345" />
-              <p className="hint">arXiv&apos;s &ldquo;Which authors of this paper are endorsers?&rdquo; page for one of your papers. Shown to authors; we don&apos;t fetch it.</p>
+              <p className="hint">arXiv&apos;s <Term slug="show-endorsers">&ldquo;Which authors of this paper are endorsers?&rdquo;</Term> page for one of your papers. Shown to authors; we don&apos;t fetch it.</p>
             </div>
           </div>
           <label className="flex items-start gap-2 text-sm">
@@ -169,7 +170,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
       </section>
 
       <section className="card" aria-labelledby="pledge-h">
-        <h2 id="pledge-h" className="h2">Pay-it-forward pledges</h2>
+        <div className="flex items-baseline gap-1"><h2 id="pledge-h" className="h2">Pay-it-forward pledges</h2><TermHint slug="pledge" /></div>
         {(pledges.data ?? []).length === 0 ? (
           <p className="mt-2 text-sm muted">No pledges yet. Once someone vouches for you, you&apos;ll be invited to pledge to review for others.</p>
         ) : (

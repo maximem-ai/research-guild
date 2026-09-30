@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ActionForm, SubmitButton } from "@/components/ActionForm";
 import { FeedbackThread } from "@/components/FeedbackThread";
 import { PaperForm } from "@/components/PaperForm";
+import { Term, TermHint } from "@/components/Term";
 import { TrackRecord, type TrackRow } from "@/components/TrackRecord";
 import { requireProfile } from "@/lib/auth";
 import { daysLeft, ENGAGEMENT_STATE_LABEL, fmtDate, OPEN_STATES, PAPER_STATUS_LABEL, PAPER_TYPE_LABEL, waitlistText } from "@/lib/format";
@@ -120,7 +121,7 @@ export default async function PaperPage({ params, searchParams }: {
             <input type="hidden" name="rc_primary_category" value={paper.primary_category} />
             {READINESS_ITEMS.filter((i) => !["paper_type", "primary_category"].includes(i.id)).map((i) => (
               <div key={i.id}>
-                <p className="text-sm">{i.question}</p>
+                <p className="text-sm">{i.question}{i.term && <TermHint slug={i.term} />}</p>
                 <span className="flex gap-4 text-sm">
                   <label className="flex items-center gap-1"><input type="radio" name={`rc_${i.id}`} value="yes" required /> Yes</label>
                   <label className="flex items-center gap-1"><input type="radio" name={`rc_${i.id}`} value="no" /> No</label>
@@ -152,7 +153,7 @@ export default async function PaperPage({ params, searchParams }: {
       {isOpen && (
         <section className="card" aria-labelledby="files-h">
           <h2 id="files-h" className="h2">Full paper &amp; endorsement code</h2>
-          <p className="mt-1 text-sm muted">PDF only, 10 MB max. Only you, your co-authors and reviewers you share with can open it. Deleted 30 days after the paper closes.</p>
+          <p className="mt-1 text-sm muted">Your <Term slug="full-paper">full paper</Term> as a PDF, 10 MB max. Only you, your co-authors and reviewers you share with can open it. Deleted 30 days after the paper closes.</p>
           {versions.length > 0 && (
             <ul className="mt-3 space-y-1 text-sm">
               {versions.map((v) => (
@@ -176,7 +177,7 @@ export default async function PaperPage({ params, searchParams }: {
           )}
           <div className="mt-5">
             <p className="text-sm">
-              arXiv endorsement code: {hasCode ? <strong className="font-mono">{secretQ.data!.endorsement_code}</strong> : <span className="muted">not set (required before sharing)</span>}
+              <Term slug="endorsement-code">arXiv endorsement code</Term>: {hasCode ? <strong className="font-mono">{secretQ.data!.endorsement_code}</strong> : <span className="muted">not set (required before sharing)</span>}
             </p>
             <ActionForm action={setCodeAction} className="mt-2 flex flex-wrap items-end gap-2">
               <input type="hidden" name="paper_id" value={paper.id} />
@@ -190,7 +191,7 @@ export default async function PaperPage({ params, searchParams }: {
       )}
 
       <section aria-labelledby="rev-h" className="space-y-4">
-        <h2 id="rev-h" className="h2">Reviewers</h2>
+        <div className="flex items-baseline gap-1"><h2 id="rev-h" className="h2">Reviewers</h2><TermHint slug="reviewer" /></div>
         {engagements.length === 0 && <p className="text-sm muted">No endorser has accepted your abstract yet. {isOpen && "Matching endorsers are listed below."}</p>}
         {engagements.map((e) => {
           const p = profiles.get(e.endorser_id);
@@ -236,14 +237,14 @@ export default async function PaperPage({ params, searchParams }: {
               {e.state === "accepted" && (!versions.length || !hasCode) && (
                 <p className="text-xs muted">To share: {!versions.length && "upload the full paper"}{!versions.length && !hasCode && " and "}{!hasCode && "add your endorsement code"}. Share within {daysLeft(e.accepted_at, cfg.accept_ttl_days ?? 7)} days or the acceptance expires.</p>
               )}
-              {e.state === "waitlisted" && <p className="alert text-sm">{waitlistText(e.waitlist_reason, positions.get(e.id) ?? null, cfg.max_active_reviewers_per_paper ?? 3)} They&apos;ll start automatically when a slot frees.</p>}
+              {e.state === "waitlisted" && <p className="alert text-sm">{waitlistText(e.waitlist_reason, positions.get(e.id) ?? null, cfg.max_active_reviewers_per_paper ?? 3)} They&apos;ll start automatically when a slot frees. <TermHint slug="waitlist" label="How the waitlist works" /></p>}
               {e.state === "endorsed_pending_author" && (
                 <p className="alert text-sm">This reviewer says they endorsed you on arXiv. Check your arXiv account, then confirm. Confirming closes the other reviews on this paper.</p>
               )}
               {e.state === "declined" && e.decline_reason && <p className="alert text-sm"><strong>Reason:</strong> <span className="whitespace-pre-wrap">{e.decline_reason}</span></p>}
               {(thread.length > 0 || ["reviewing", "endorsed_pending_author"].includes(e.state)) && (
                 <div>
-                  <h3 className="mb-2 text-sm font-semibold">Feedback thread · {e.feedback_rounds} round{e.feedback_rounds === 1 ? "" : "s"}</h3>
+                  <h3 className="mb-2 text-sm font-semibold">Feedback thread · {e.feedback_rounds} <Term slug="feedback-round">round{e.feedback_rounds === 1 ? "" : "s"}</Term></h3>
                   <FeedbackThread engagementId={e.id} paperId={paper.id} messages={thread} names={names} meId={profile.id}
                     canPost={["reviewing", "endorsed_pending_author"].includes(e.state)} versions={versions} placeholder="Reply to your reviewer…" />
                 </div>
@@ -268,7 +269,7 @@ export default async function PaperPage({ params, searchParams }: {
           <h2 id="after-h" className="h2">After your endorsement</h2>
           {paper.status === "endorsed" ? (
             <div>
-              <p className="text-sm">Once arXiv announces your paper, add its ID. We check the arXiv API that it exists, lists your name, and is in {endorsement.category_code}. This builds your endorser&apos;s public track record.</p>
+              <p className="text-sm">Once arXiv announces your paper, add its <Term slug="arxiv-id">arXiv ID</Term>. We check the arXiv API that it exists, lists your name, and is in {endorsement.category_code}. This builds your endorser&apos;s public track record.</p>
               <ActionForm action={verifyArxivAction} className="mt-3 flex flex-wrap gap-2">
                 <input type="hidden" name="paper_id" value={paper.id} />
                 <input name="arxiv_id" className="input w-56" placeholder="e.g. 2409.12345" required aria-label="arXiv ID" />
@@ -280,6 +281,7 @@ export default async function PaperPage({ params, searchParams }: {
           )}
           <div className="border-t border-theme pt-4">
             <h3 className="font-semibold">Someone vouched for you. Will you review for others once you&apos;re eligible?</h3>
+            <p className="mt-1 text-sm muted">That&apos;s a <Term slug="pledge">pay-it-forward pledge</Term>.</p>
             {pledged && pledged.status !== "declined" ? (
               <p className="mt-2 text-sm">You pledged to review in {pledged.category_code} ({pledged.status}). We&apos;ll remind you 3 months after your paper is posted, when arXiv may count it towards your eligibility.</p>
             ) : (
@@ -296,7 +298,7 @@ export default async function PaperPage({ params, searchParams }: {
         <section className="card" aria-labelledby="match-h">
           <h2 id="match-h" className="h2">Endorsers who follow your topics</h2>
           <p className="mt-1 text-sm muted">
-            {matches.length} available endorser{matches.length === 1 ? "" : "s"} in {paper.primary_category}. You can nudge up to {cfg.max_nudges_per_paper_per_week ?? 3} per week
+            {matches.length} available <Term slug="endorser">endorser{matches.length === 1 ? "" : "s"}</Term> in {paper.primary_category}. You can <Term slug="nudge">nudge</Term> up to {cfg.max_nudges_per_paper_per_week ?? 3} per week
             (in-app only) — {Math.max(0, (cfg.max_nudges_per_paper_per_week ?? 3) - nudgesThisWeek)} left. Please don&apos;t contact endorsers elsewhere.
           </p>
           <ul className="mt-3 space-y-2">

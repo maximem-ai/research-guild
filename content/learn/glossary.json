@@ -1,0 +1,417 @@
+{
+  "_note": "Glossary for the learning center (CC BY 4.0). Definitions stay general; arXiv-specific details point to the linked article, which cites arXiv's own pages. `aliases` are used to auto-link the first mention in each article (case-insensitive, whole words).",
+  "groups": [
+    {
+      "id": "arxiv",
+      "title": "arXiv and preprints"
+    },
+    {
+      "id": "papers",
+      "title": "Papers and categories"
+    },
+    {
+      "id": "endorsement",
+      "title": "Endorsement"
+    },
+    {
+      "id": "after",
+      "title": "After you submit"
+    },
+    {
+      "id": "platform",
+      "title": "On Endorse Commons"
+    },
+    {
+      "id": "identity",
+      "title": "Identity and research profiles"
+    }
+  ],
+  "terms": [
+    {
+      "slug": "arxiv",
+      "term": "arXiv",
+      "group": "arxiv",
+      "aliases": [],
+      "definition": "A free, open-access repository where researchers share papers publicly, usually before or alongside formal publication. It is not a peer-reviewed journal.",
+      "article": "is-arxiv-right-for-my-paper"
+    },
+    {
+      "slug": "preprint",
+      "term": "Preprint",
+      "group": "arxiv",
+      "aliases": [
+        "preprints"
+      ],
+      "definition": "A complete research paper shared publicly before, or independently of, peer review in a journal or conference.",
+      "article": "is-arxiv-right-for-my-paper"
+    },
+    {
+      "slug": "peer-review",
+      "term": "Peer review",
+      "group": "arxiv",
+      "aliases": [
+        "peer-reviewed",
+        "peer reviewed"
+      ],
+      "definition": "Formal evaluation of a paper by independent experts, usually organised by a journal or conference, before it is accepted for publication. arXiv moderation and endorsement are not peer review.",
+      "article": "research-survey-position-papers"
+    },
+    {
+      "slug": "doi",
+      "term": "DOI",
+      "group": "arxiv",
+      "aliases": [],
+      "definition": "Digital Object Identifier: a permanent ID for a published work, such as 10.1145/1234567. A DOI can serve as proof that a paper was published after peer review.",
+      "article": "research-survey-position-papers"
+    },
+    {
+      "slug": "abstract",
+      "term": "Abstract",
+      "group": "papers",
+      "aliases": [
+        "abstracts"
+      ],
+      "definition": "A short summary of a paper: the problem, what you did and what you found. On Endorse Commons, only the abstract is shown until you choose who reads the full paper.",
+      "article": "what-to-send-an-endorser"
+    },
+    {
+      "slug": "original-research",
+      "term": "Original research paper",
+      "group": "papers",
+      "aliases": [
+        "original research"
+      ],
+      "definition": "A paper that reports new work: new methods, experiments, results, data or proofs.",
+      "article": "research-survey-position-papers"
+    },
+    {
+      "slug": "survey-paper",
+      "term": "Survey or review paper",
+      "group": "papers",
+      "aliases": [
+        "survey paper",
+        "review paper",
+        "review article"
+      ],
+      "definition": "A paper that summarises and organises existing work on a topic rather than reporting new results. arXiv's CS section only accepts these after they have passed peer review elsewhere.",
+      "article": "research-survey-position-papers"
+    },
+    {
+      "slug": "position-paper",
+      "term": "Position paper",
+      "group": "papers",
+      "aliases": [
+        "position papers"
+      ],
+      "definition": "A paper that argues for a viewpoint or direction for a field rather than reporting new results. Like surveys, arXiv's CS section only accepts these after peer review elsewhere.",
+      "article": "research-survey-position-papers"
+    },
+    {
+      "slug": "category",
+      "term": "Category (subject class)",
+      "group": "papers",
+      "aliases": [
+        "subject class",
+        "subject classes",
+        "categories",
+        "category"
+      ],
+      "definition": "arXiv's topic label for a paper, such as cs.AI (Artificial Intelligence) or cs.CL (Computation and Language). Moderators and readers use it to route and find papers.",
+      "article": "choosing-primary-category"
+    },
+    {
+      "slug": "primary-category",
+      "term": "Primary category",
+      "group": "papers",
+      "aliases": [],
+      "definition": "The single category that best fits a paper's main contribution. It decides which endorsement you need and where the paper is announced.",
+      "article": "choosing-primary-category"
+    },
+    {
+      "slug": "cross-listing",
+      "term": "Cross-listing",
+      "group": "papers",
+      "aliases": [
+        "cross-list",
+        "cross-listed",
+        "cross-lists"
+      ],
+      "definition": "Also listing a paper in secondary categories so readers in related fields can find it. Use it only when the paper is genuinely relevant there.",
+      "article": "cross-listing"
+    },
+    {
+      "slug": "sub-topic",
+      "term": "Sub-topic",
+      "group": "papers",
+      "aliases": [
+        "sub-topics"
+      ],
+      "definition": "An Endorse Commons tag inside a category, such as “Agents & planning” in cs.AI. Authors tag papers with 1–3 sub-topics and endorsers follow the ones they know, which drives matching. arXiv doesn't use these.",
+      "article": null
+    },
+    {
+      "slug": "tex",
+      "term": "TeX / LaTeX",
+      "group": "papers",
+      "aliases": [
+        "LaTeX",
+        "TeX"
+      ],
+      "definition": "A typesetting system widely used for scientific papers. arXiv accepts TeX/LaTeX source as well as PDFs; the linked article explains which to use.",
+      "article": "tex-or-pdf"
+    },
+    {
+      "slug": "license",
+      "term": "License",
+      "group": "papers",
+      "aliases": [
+        "licence",
+        "licenses"
+      ],
+      "definition": "The permission you choose when submitting, which says how others may reuse your paper (for example, a Creative Commons license). arXiv treats each version's license as irrevocable.",
+      "article": "licenses-on-arxiv"
+    },
+    {
+      "slug": "endorsement",
+      "term": "Endorsement",
+      "group": "endorsement",
+      "aliases": [
+        "endorsements",
+        "endorsed"
+      ],
+      "definition": "A statement, made on arXiv's own form by an established arXiv author, that you are someone who can reasonably contribute to a subject area. It is not peer review and doesn't guarantee acceptance.",
+      "article": "what-is-arxiv-endorsement"
+    },
+    {
+      "slug": "endorser",
+      "term": "Endorser",
+      "group": "endorsement",
+      "aliases": [
+        "endorsers"
+      ],
+      "definition": "An arXiv author who is eligible to endorse in a subject area, which depends on their own recent papers there. On Endorse Commons, endorsers are volunteers who opt in to read abstracts.",
+      "article": "am-i-eligible-to-endorse"
+    },
+    {
+      "slug": "endorsement-code",
+      "term": "Endorsement code",
+      "group": "endorsement",
+      "aliases": [
+        "endorsement codes"
+      ],
+      "definition": "A short code arXiv gives you when it asks for an endorsement. An endorser enters it on arXiv's form to endorse you. Here it stays hidden until a reviewer has opened your full paper.",
+      "article": "getting-your-endorsement-code"
+    },
+    {
+      "slug": "endorsement-domain",
+      "term": "Endorsement domain",
+      "group": "endorsement",
+      "aliases": [
+        "endorsement domains"
+      ],
+      "definition": "A group of related arXiv subject areas that share one endorsement. Being endorsed in one domain doesn't automatically cover another.",
+      "article": "what-is-arxiv-endorsement"
+    },
+    {
+      "slug": "negative-endorsement",
+      "term": "“Do not endorse”",
+      "group": "endorsement",
+      "aliases": [
+        "do not endorse",
+        "negative endorsement"
+      ],
+      "definition": "The option on arXiv's endorsement form for an endorser who decides not to vouch for someone. It counts as a real vote, so declines here should also be recorded there.",
+      "article": "how-to-decline-kindly"
+    },
+    {
+      "slug": "show-endorsers",
+      "term": "“Show endorsers” page",
+      "group": "endorsement",
+      "aliases": [
+        "show-endorsers"
+      ],
+      "definition": "arXiv's page that lists which authors of a given paper can endorse. Endorsers on Endorse Commons link one as evidence of eligibility.",
+      "article": "am-i-eligible-to-endorse"
+    },
+    {
+      "slug": "moderation",
+      "term": "Moderation",
+      "group": "after",
+      "aliases": [
+        "moderators",
+        "moderator"
+      ],
+      "definition": "arXiv's check of every submission for fit and basic quality before it is announced. It is separate from endorsement and from peer review.",
+      "article": "after-you-submit"
+    },
+    {
+      "slug": "on-hold",
+      "term": "On hold",
+      "group": "after",
+      "aliases": [],
+      "definition": "A submission status meaning arXiv moderators are taking a closer look before announcing the paper.",
+      "article": "after-you-submit"
+    },
+    {
+      "slug": "reclassification",
+      "term": "Reclassification",
+      "group": "after",
+      "aliases": [
+        "reclassified"
+      ],
+      "definition": "When arXiv moderators move a paper to a different primary category than the one the author chose.",
+      "article": "after-you-submit"
+    },
+    {
+      "slug": "arxiv-id",
+      "term": "arXiv ID",
+      "group": "after",
+      "aliases": [
+        "arXiv identifier"
+      ],
+      "definition": "The permanent identifier arXiv assigns when a paper is announced, such as 2409.12345. Adding it here lets us verify the posting.",
+      "article": "replacing-versioning-withdrawing"
+    },
+    {
+      "slug": "replacement",
+      "term": "Replacement (new version)",
+      "group": "after",
+      "aliases": [
+        "replacement",
+        "versioning"
+      ],
+      "definition": "Uploading an updated version of an announced paper. Earlier versions stay available, labelled v1, v2 and so on.",
+      "article": "replacing-versioning-withdrawing"
+    },
+    {
+      "slug": "withdrawal",
+      "term": "Withdrawal",
+      "group": "after",
+      "aliases": [
+        "withdraw",
+        "withdrawn"
+      ],
+      "definition": "Marking an announced arXiv paper as withdrawn. It adds a new version with your reason, and earlier versions remain accessible, so withdrawal isn't deletion.",
+      "article": "replacing-versioning-withdrawing"
+    },
+    {
+      "slug": "readiness-check",
+      "term": "Readiness check",
+      "group": "platform",
+      "aliases": [],
+      "definition": "Seven questions you must pass before posting an abstract here: paper type, a complete English version, a finished draft, category, own work, endorsement code, and a promise not to mass-ask.",
+      "article": null
+    },
+    {
+      "slug": "full-paper",
+      "term": "Full paper",
+      "group": "platform",
+      "aliases": [],
+      "definition": "Your complete manuscript as a PDF. It is private: only you, your co-authors and the reviewers you share it with can open it, and it's deleted 30 days after the paper closes.",
+      "article": "manuscript-confidentiality"
+    },
+    {
+      "slug": "reviewer",
+      "term": "Reviewer",
+      "group": "platform",
+      "aliases": [
+        "reviewers"
+      ],
+      "definition": "On Endorse Commons, an endorser who has accepted your abstract and received your full paper. Up to 3 can hold a paper at once.",
+      "article": null
+    },
+    {
+      "slug": "waitlist",
+      "term": "Waitlist",
+      "group": "platform",
+      "aliases": [
+        "waitlisted"
+      ],
+      "definition": "A first-come queue for reviewers when a paper already has the maximum number of active reviewers, or a reviewer is at their own capacity. People move in automatically when a slot frees.",
+      "article": null
+    },
+    {
+      "slug": "feedback-round",
+      "term": "Feedback round",
+      "group": "platform",
+      "aliases": [
+        "feedback rounds"
+      ],
+      "definition": "One turn of reviewer comments followed by the author's reply or new version. Rounds happen in in-app threads; there are no private messages.",
+      "article": "giving-useful-feedback"
+    },
+    {
+      "slug": "capability",
+      "term": "Endorser capability",
+      "group": "platform",
+      "aliases": [
+        "capability"
+      ],
+      "definition": "Your self-declared eligibility to endorse in one category, with an evidence link. It shows as “claimed” until a paper you endorse here is verified as posted in that category, then “confirmed”.",
+      "article": "am-i-eligible-to-endorse"
+    },
+    {
+      "slug": "nudge",
+      "term": "Nudge",
+      "group": "platform",
+      "aliases": [
+        "nudges"
+      ],
+      "definition": "An in-app note an author can send to a matching endorser. It is limited to 3 per paper per week so nobody is mass-asked.",
+      "article": "finding-an-endorser"
+    },
+    {
+      "slug": "karma",
+      "term": "Karma",
+      "group": "platform",
+      "aliases": [],
+      "definition": "Points that make helping newcomers visible. Endorsing and declining earn the same. Karma has no monetary value and can't be transferred.",
+      "article": null
+    },
+    {
+      "slug": "track-record",
+      "term": "Track record",
+      "group": "platform",
+      "aliases": [],
+      "definition": "An endorser's history here: confirmed endorsements, how many were verified as posted on arXiv, and how helpful authors found their feedback.",
+      "article": null
+    },
+    {
+      "slug": "pledge",
+      "term": "Pay-it-forward pledge",
+      "group": "platform",
+      "aliases": [
+        "pledge",
+        "pledges"
+      ],
+      "definition": "A promise, made after someone vouches for you, to review for others once you are eligible. We remind you 3 months after your paper is posted.",
+      "article": null
+    },
+    {
+      "slug": "orcid",
+      "term": "ORCID iD",
+      "group": "identity",
+      "aliases": [
+        "ORCID"
+      ],
+      "definition": "A free, persistent identifier for researchers, like 0000-0002-1825-0097, that links you to your work. Optional here.",
+      "article": null
+    },
+    {
+      "slug": "openalex",
+      "term": "OpenAlex",
+      "group": "identity",
+      "aliases": [],
+      "definition": "A free, open catalogue of scholarly works and authors. We use it to list your past papers when you pick your author record.",
+      "article": null
+    },
+    {
+      "slug": "google-scholar",
+      "term": "Google Scholar",
+      "group": "identity",
+      "aliases": [],
+      "definition": "Google's search engine for academic papers. Researcher profiles there list papers and citations. We show your link but can't read it automatically.",
+      "article": null
+    }
+  ]
+}

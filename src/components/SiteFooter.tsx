@@ -8,6 +8,7 @@ export function SiteFooter() {
         <nav className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Footer">
           <Link href="/learn" className="hover:underline">Learning center</Link>
           <Link href="/learn/readiness-check" className="hover:underline">Readiness check</Link>
+          <Link href="/learn/glossary" className="hover:underline">Glossary</Link>
           <Link href="/karma" className="hover:underline">Karma</Link>
           <Link href="/about" className="hover:underline">About</Link>
           <Link href="/privacy" className="hover:underline">Privacy</Link>
