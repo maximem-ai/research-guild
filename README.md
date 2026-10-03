@@ -78,7 +78,7 @@ flowchart LR
 | Path | What |
 |---|---|
 | `supabase/migrations/` | Schema, reference data (categories and topics), RPCs and triggers, RLS and views, storage policies, cron jobs |
-| `supabase/tests/` | pgTAP tests: state machine, waitlist, fan-out, karma, RLS, trust features, cron (134 assertions) |
+| `supabase/tests/` | pgTAP tests: state machine, waitlist, fan-out, karma, RLS, trust features, cron (140 assertions) |
 | `supabase/functions/` | Edge Functions: `embed` (gte-small embeddings), `retention` (PDF deletion) and `verify-arxiv` (arXiv lookup) |
 | `src/app/(public)/` | Home, learning center, readiness check, karma, availability pages, legal pages |
 | `src/app/app/` | The signed-in app: onboarding, feed, papers, reviews, notifications, settings, admin |
@@ -126,7 +126,7 @@ To apply future migrations automatically on every push to `main`, connect the re
 **Cloudflare Workers** — connect the GitHub repo once; every push to `main` then builds and deploys:
 
 1. Workers & Pages → **Create** → **Import a repository** → authorize the Cloudflare GitHub app → pick this repo.
-2. Project name **`endorse-commons`** (must match `name` in `wrangler.jsonc`), production branch `main`.
+2. Project name **`preprint-commons`** (must match `name` in `wrangler.jsonc`), production branch `main`.
 3. Build command `npx opennextjs-cloudflare build`, deploy command `npx opennextjs-cloudflare deploy`.
 4. Build variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SITE_URL` (they're inlined at build time).
 5. Optional: Worker → Settings → Domains & Routes → add your custom domain, then update `NEXT_PUBLIC_SITE_URL` and redeploy.
