@@ -8,18 +8,19 @@ export default function About() {
   return (
     <article className="container-page max-w-3xl py-12 prose-learn">
       <h1 className="h1">About {APP_NAME}</h1>
-      <p><strong>Anyone with a real contribution should be able to share it with the world.</strong></p>
+      <p><strong>Get your first paper reviewed and endorsed.</strong></p>
       <p>
-        {APP_NAME} is a free, open-source community that helps first-time researchers (students, young learners and independent
-        researchers anywhere) learn how open science works, get honest feedback from people who have published, and find someone
-        willing to vouch for their work.
+        On {APP_NAME}, first-time researchers (students, young learners and independent researchers anywhere) learn how arXiv works,
+        revise their paper with people who have published, and find an endorser in their field. Endorsers choose the abstracts they
+        want to read, review the full paper, and endorse or decline on its merits. Anyone with a real contribution should be able to
+        share it with the world, whoever they happen to know.
       </p>
       <h2>Our goals</h2>
       <ol>
-        <li><strong>Free knowledge.</strong> Every question you have before your first paper is answered for free, with no sign-in.</li>
-        <li><strong>Fair access.</strong> Getting feedback and an endorsement depends on your work, not on your network, institution or country.</li>
-        <li><strong>Visible generosity.</strong> The unpaid work of helping newcomers is recognized and portable.</li>
-        <li><strong>Protect the commons.</strong> Keep quality high so open preprint servers stay open for everyone. No endorsement mills.</li>
+        <li><strong>Learn for free.</strong> Every question you have before your first paper is answered openly, with no sign-in.</li>
+        <li><strong>Get judged on your work.</strong> Feedback and endorsement depend on the paper, not on your network, institution or country.</li>
+        <li><strong>Get credit for helping.</strong> Reviewing newcomers is unpaid work, so it shows up as karma, badges and a portable track record.</li>
+        <li><strong>Keep arXiv open.</strong> Endorsers read the full paper before vouching for it, which keeps endorsement mills out.</li>
       </ol>
       <h2>What we measure</h2>
       <p>
