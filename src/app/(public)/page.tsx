@@ -58,7 +58,7 @@ export default async function Home() {
       <section className="container-page grid items-center gap-10 py-16 sm:py-24 lg:grid-cols-[1fr_380px]">
         <div>
           <p className="badge badge-accent mb-5">Free · open source · not affiliated with arXiv</p>
-          <h1 className="max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl">
+          <h1 className="max-w-3xl text-[1.75rem] font-semibold leading-tight sm:text-4xl xl:text-[2.6rem]">
             Get honest feedback on your paper before publishing, and find someone to endorse you for your first paper in a domain.
           </h1>
           <p className="mt-6 max-w-2xl text-lg muted">

@@ -27,7 +27,7 @@ export function SiteHeader() {
         <Logo />
         <div className="flex items-center gap-4 text-sm">
           <Link href="/learn" className="hover:underline">Learn</Link>
-          <Link href="/#faq" className="hover:underline">FAQ</Link>
+          <Link href="/#faq" className="hidden hover:underline sm:inline">FAQ</Link>
           <Link href="/karma" className="hidden hover:underline sm:inline">Karma</Link>
           <Link href="/about" className="hidden hover:underline sm:inline">About</Link>
           <GitHubLink />
