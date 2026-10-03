@@ -1,19 +1,13 @@
-GitHub "About" box for maximem-ai/research-guild (Settings is not editable from automation; paste these in by hand)
+GitHub "About" box for maximem-ai/research-guild, as set on the repository (kept here for reference).
 
 Description:
-Get your first paper reviewed and endorsed. Free, open-source feedback and arXiv endorsement for first-time researchers.
+Get honest feedback on your first paper, and find someone to endorse it on arXiv.
 
 Website:
-https://researchguild.org
+https://researchguild.org/
 
 Topics:
-arxiv, preprints, open-science, endorsement, peer-feedback, research, academia, students, nextjs, supabase, cloudflare-workers, postgres, agpl
+academia, arxiv, arxiv-papers, endorsements, open-science, peer-feedback, research
 
 Social preview image (Settings → General → Social preview):
 .github/social-card.png
-
-Or, with the GitHub CLI:
-gh repo edit maximem-ai/research-guild \
-  --description "Get your first paper reviewed and endorsed. Free, open-source feedback and arXiv endorsement for first-time researchers." \
-  --homepage https://researchguild.org \
-  --add-topic arxiv,preprints,open-science,endorsement,peer-feedback,research,academia,students,nextjs,supabase,cloudflare-workers,postgres,agpl
