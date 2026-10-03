@@ -1,0 +1,26 @@
+name: Feature request
+description: Suggest a change that would help authors find endorsers, or help endorsers review.
+labels: [enhancement, triage]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve, and for whom?
+      description: Describe the situation of a first-time author or an endorser that this would improve.
+    validations: { required: true }
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to happen?
+    validations: { required: true }
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+  - type: checkboxes
+    id: principles
+    attributes:
+      label: Fit with the project
+      options:
+        - label: This keeps ResearchGuild free, with no email and no payments.
+          required: true

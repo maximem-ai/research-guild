@@ -19,6 +19,14 @@ git commit -s -m "Explain the change"
 
 This adds `Signed-off-by: Your Name <you@example.com>`. It certifies that you wrote the change, or otherwise have the right to submit it under the project's licenses (AGPL-3.0 for code, CC BY 4.0 for `content/learn/**`).
 
+## How pull requests work
+
+1. Open an issue first for anything bigger than a small fix, so we can agree on the approach. Issues use forms for bugs, feature requests and learning-center corrections.
+2. Fork the repository, create a branch, and open a pull request against `main`. The PR template asks how you tested the change and whether you used AI tools.
+3. CI runs on every pull request: **DCO sign-off**, **Lint, typecheck, unit tests, build**, **Migrations + SQL tests**, and **End-to-end**. All of them must pass.
+4. A maintainer listed in [`.github/CODEOWNERS`](.github/CODEOWNERS) reviews it. We squash-merge, so the PR title becomes the commit message.
+5. Dependabot opens weekly dependency updates; they go through the same checks.
+
 ## Development
 
 ```bash

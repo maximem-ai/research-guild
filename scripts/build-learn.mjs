@@ -133,3 +133,25 @@ fs.writeFileSync(path.join(outDir, "learn.json"), JSON.stringify({ articles }, n
 const search = articles.map((a) => ({ slug: a.slug, title: a.title, description: a.description, faq: a.faq.map((f) => f.q) }));
 fs.writeFileSync(path.join(outDir, "learn-search.json"), JSON.stringify(search));
 console.log(`learn: compiled ${articles.length} articles`);
+
+// llms.txt for the site (https://researchguild.org/llms.txt), regenerated from the same articles.
+const SITE = "https://researchguild.org";
+const SECTION_TITLES = { "before-authoring": "Before authoring", "before-submitting": "Before submitting", "before-reviewing": "Before reviewing or endorsing" }; // as in src/lib/learn.ts
+const llms = [
+  "# ResearchGuild",
+  "> Get your first paper reviewed and endorsed. First-time researchers post an abstract, get feedback from people who have published, and find an arXiv endorser in their field. Free and open source (AGPL-3.0); not affiliated with arXiv.",
+  "",
+  "## Start here",
+  `- [Home and FAQ](${SITE}/#faq): how to find an endorser and how to become one`,
+  `- [arXiv readiness check](${SITE}/learn/readiness-check): 7 questions, no sign-in`,
+  `- [Glossary](${SITE}/learn/glossary): arXiv and ResearchGuild terms`,
+  `- [Source code](https://github.com/maximem-ai/research-guild)`,
+  "",
+  ...Object.entries(SECTION_TITLES).flatMap(([id, title]) => [
+    `## Learning center: ${title}`,
+    ...articles.filter((a) => a.section === id).map((a) => `- [${a.title}](${SITE}/learn/${a.slug}): ${a.description}`),
+    "",
+  ]),
+].join("\n");
+fs.mkdirSync("public", { recursive: true });
+fs.writeFileSync("public/llms.txt", llms);

@@ -1,0 +1,32 @@
+# ResearchGuild
+> Get your first paper reviewed and endorsed. First-time researchers post an abstract, get feedback from people who have published, and find an arXiv endorser in their field. Free and open source (AGPL-3.0); not affiliated with arXiv.
+
+## Start here
+- [Home and FAQ](https://researchguild.org/#faq): how to find an endorser and how to become one
+- [arXiv readiness check](https://researchguild.org/learn/readiness-check): 7 questions, no sign-in
+- [Glossary](https://researchguild.org/learn/glossary): arXiv and ResearchGuild terms
+- [Source code](https://github.com/maximem-ai/research-guild)
+
+## Learning center: Before authoring
+- [Is arXiv the right place for my paper?](https://researchguild.org/learn/is-arxiv-right-for-my-paper): A plain-English check on whether arXiv fits your work: what arXiv is, what its moderators look for, and which kinds of papers usually belong elsewhere.
+- [Research paper vs survey vs position paper — and the CS peer-review rule](https://researchguild.org/learn/research-survey-position-papers): How arXiv's October 2025 CS practice treats review articles and position papers differently from research papers, and what documentation you need to include.
+- [Choosing your primary category (cs.AI vs cs.LG vs cs.CL and friends)](https://researchguild.org/learn/choosing-primary-category): How to pick the right arXiv primary category for AI, machine learning and NLP papers, using arXiv's own taxonomy and machine learning classification guide.
+- [Cross-listing: when and how](https://researchguild.org/learn/cross-listing): What arXiv cross-listing is, when adding a secondary category helps readers, why arXiv warns against excessive cross-lists, and how moderators handle them.
+- [English-language requirement and translations](https://researchguild.org/learn/english-language-requirement): arXiv now requires a full English-language version of every submission. Here's what that means, how to include a translation, and how to order your files.
+- [TeX or PDF? Preparing files arXiv will accept](https://researchguild.org/learn/tex-or-pdf): Should you upload LaTeX source or a PDF to arXiv? What arXiv says about PDFs made from TeX, fonts, figures, .bbl files and common reasons processing fails.
+- [Licenses on arXiv, explained](https://researchguild.org/learn/licenses-on-arxiv): A friendly guide to the licenses arXiv offers, from CC BY to the arXiv non-exclusive license, and why your choice is irrevocable once your paper is posted.
+
+## Learning center: Before submitting
+- [What is arXiv endorsement and do I need one?](https://researchguild.org/learn/what-is-arxiv-endorsement): What arXiv endorsement is, why it exists, and how the January 2026 update ended institutional email alone as a route to automatic endorsement for new authors.
+- [Getting your endorsement code](https://researchguild.org/learn/getting-your-endorsement-code): How to get your arXiv endorsement request: start a submission, pick a category, find the email with your code and link, and share it safely with an endorser.
+- [How to find an endorser the right way](https://researchguild.org/learn/finding-an-endorser): Respectful ways to find an arXiv endorser: start with people who know your work, use arXiv's own tools, avoid mass emails, and use opt-in communities.
+- [What to send an endorser](https://researchguild.org/learn/what-to-send-an-endorser): What to include when asking someone to consider endorsing you on arXiv: a short intro, your paper, category, endorsement link and code, plus a template.
+- [After you submit: on hold, reclassification and moderation](https://researchguild.org/learn/after-you-submit): What happens after you submit to arXiv: the announcement schedule, why papers go on hold, how reclassification works, and how to appeal a moderation decision.
+- [Replacing, versioning and withdrawing a paper](https://researchguild.org/learn/replacing-versioning-withdrawing): How arXiv versions work: fixing a paper before it is announced, replacing it with a new version afterwards, and what withdrawal does and does not remove.
+
+## Learning center: Before reviewing or endorsing
+- [Am I eligible to endorse?](https://researchguild.org/learn/am-i-eligible-to-endorse): How arXiv decides who can endorse: authorship within an endorsement domain, a paper-date window, registering as author of your papers, and how domains work.
+- [What an endorser is (and isn't) responsible for](https://researchguild.org/learn/endorser-responsibilities): What arXiv asks of endorsers: know the author or see the paper, check it fits the subject area and keep it confidential. What it does not ask: peer review.
+- [Giving useful pre-submission feedback](https://researchguild.org/learn/giving-useful-feedback): How to give first-time authors feedback that helps before arXiv: check fit, category, content type, format and clarity, and write comments they can act on.
+- [How to decline kindly](https://researchguild.org/learn/how-to-decline-kindly): How to say no to an endorsement request with care: when arXiv says not to endorse, recording 'do not endorse' on arXiv's form, and writing a kind note.
+- [Manuscript confidentiality for reviewers](https://researchguild.org/learn/manuscript-confidentiality): Why unpublished manuscripts you review must stay confidential, what arXiv asks of endorsers, and how ResearchGuild handles manuscript visibility and deletion.

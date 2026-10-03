@@ -5,6 +5,8 @@
   "license": "AGPL-3.0-only",
   "scripts": {
     "learn:build": "node scripts/build-learn.mjs",
+    "brand:render": "node scripts/render-brand.mjs",
+    "readme:faq": "node --no-warnings scripts/sync-readme-faq.mjs",
     "predev": "npm run learn:build",
     "dev": "next dev",
     "prebuild": "npm run learn:build",

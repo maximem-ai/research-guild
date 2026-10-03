@@ -1,0 +1,22 @@
+name: Learning-center correction
+description: An article is wrong, out of date, or missing something from arXiv's official documentation.
+labels: [content, triage]
+body:
+  - type: input
+    id: article
+    attributes:
+      label: Article URL
+      placeholder: https://researchguild.org/learn/what-is-arxiv-endorsement
+    validations: { required: true }
+  - type: textarea
+    id: issue
+    attributes:
+      label: What should change?
+      description: Quote the current sentence and suggest the corrected one.
+    validations: { required: true }
+  - type: input
+    id: source
+    attributes:
+      label: Official source
+      description: A link to info.arxiv.org, blog.arxiv.org or another official arXiv page that supports the change.
+    validations: { required: true }

@@ -1,0 +1,35 @@
+name: Bug report
+description: Something on researchguild.org or in a self-hosted copy does not work as it should.
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: Do not paste manuscripts, endorsement codes or anyone's personal data here. For security issues use the private advisory link instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+    validations: { required: true }
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. Go to /app/papers/new\n2. ...\n3. See error"
+    validations: { required: true }
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where did it happen?
+      options: [researchguild.org, Self-hosted copy, Local development]
+    validations: { required: true }
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options: [Sign-in, Onboarding or profile, Posting an abstract, Reviews and feedback, Endorsement, Learning center, Karma or availability pages, Other]
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: Chrome 140 on macOS

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
 import { Term } from "@/components/Term";
 import { BECOME_ENDORSER_FAQ, FIND_ENDORSER_FAQ, type Faq } from "@/lib/faq";
+import { GITHUB_URL } from "@/lib/env";
 import { getPledgeStats } from "@/lib/public-data";
 
 export const dynamic = "force-dynamic";
@@ -54,21 +55,29 @@ export default async function Home() {
   return (
     <div>
       <JsonLd data={faqLd} />
-      <section className="container-page py-16 sm:py-24">
-        <p className="badge badge-accent mb-5">Free · open source · not affiliated with arXiv</p>
-        <h1 className="max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl">
-          Get honest feedback on your first paper, and find someone to endorse it on arXiv.
-        </h1>
-        <p className="mt-6 max-w-2xl text-lg muted">
-          Post your abstract and let endorsers in your field choose to read it. Share the full paper with the reviewers you pick,
-          revise it with people who have published, and leave with an arXiv endorsement once the work is ready. Students, young
-          learners and independent researchers anywhere are welcome.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/app/papers/new" className="btn btn-primary">Post your abstract</Link>
-          <Link href="/app/settings#endorse" className="btn">Become an endorser</Link>
-          <Link href="/learn/readiness-check" className="btn">Check if you are ready</Link>
+      <section className="container-page grid items-center gap-10 py-16 sm:py-24 lg:grid-cols-[1fr_380px]">
+        <div>
+          <p className="badge badge-accent mb-5">Free · open source · not affiliated with arXiv</p>
+          <h1 className="max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl">
+            Get honest feedback on your first paper, and find someone to endorse it on arXiv.
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg muted">
+            Post your abstract and let endorsers in your field choose to read it. Share the full paper with the reviewers you pick,
+            revise it with people who have published, and leave with an arXiv endorsement once the work is ready. Students, young
+            learners and independent researchers anywhere are welcome.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/app/papers/new" className="btn btn-primary">Post your abstract</Link>
+            <Link href="/app/settings#endorse" className="btn">Become an endorser</Link>
+            <Link href="/learn/readiness-check" className="btn">Check if you are ready</Link>
+          </div>
+          <p className="mt-6 text-sm muted">
+            ResearchGuild is open source under AGPL-3.0.{" "}
+            <a href={GITHUB_URL} className="link" target="_blank" rel="noopener noreferrer">Read the code, report an issue or contribute on GitHub</a>.
+          </p>
         </div>
+        <img src="/illustration-paper.png" width={540} height={610} alt="An abstract in cs.CL with two feedback rounds and an Endorsed stamp"
+          className="hidden h-auto w-full lg:block" />
       </section>
 
       <section className="soft border-y border-theme">
