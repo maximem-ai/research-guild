@@ -1,7 +1,7 @@
 // Edge Function `embed`: computes 384-d gte-small embeddings for queued papers/endorsers.
 // Only jobs in categories past the smart-matching thresholds are claimed (see claim_embedding_jobs).
 // Uses Supabase's built-in AI inference (no external API, no key).
-import { isServiceCall, rpc } from "../_shared/auth.ts";
+import { isCronCall, rpc } from "../_shared/auth.ts";
 
 type Job = { job_id: number; target_type: string; target_id: string; content: string | null };
 
@@ -9,7 +9,7 @@ type Job = { job_id: number; target_type: string; target_id: string; content: st
 const session = new (globalThis as any).Supabase.ai.Session("gte-small");
 
 Deno.serve(async (req) => {
-  if (!isServiceCall(req)) return new Response("Forbidden", { status: 403 });
+  if (!(await isCronCall(req))) return new Response("Forbidden", { status: 403 });
   try {
     const jobs = await rpc<Job[]>("claim_embedding_jobs", { p_limit: 25 });
     let done = 0;

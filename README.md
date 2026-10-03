@@ -50,7 +50,7 @@ flowchart LR
     Cron[pg_cron<br/>expiry · waitlists · reminders]
     Storage[(Storage<br/>private papers · public avatars)]
     RT[Realtime]
-    Edge[Edge Functions<br/>embed · retention]
+    Edge[Edge Functions<br/>embed · retention · verify-arxiv]
     Vec[(pgvector<br/>gte-small)]
   end
   arXiv[[arXiv API]]
@@ -61,8 +61,9 @@ flowchart LR
   Next --> Assets
   Next -- user JWT --> PG
   Next -- signed URLs --> Storage
+  Next -- user JWT --> Edge
   Next --> Auth
-  Next -. verify posting .-> arXiv
+  Edge -. verify posting .-> arXiv
   Next -. find my papers .-> OA
   Next -. public counts .-> HF
   Bell --> RT --> PG
@@ -78,7 +79,7 @@ flowchart LR
 |---|---|
 | `supabase/migrations/` | Schema, reference data (categories and topics), RPCs and triggers, RLS and views, storage policies, cron jobs |
 | `supabase/tests/` | pgTAP tests: state machine, waitlist, fan-out, karma, RLS, trust features, cron (134 assertions) |
-| `supabase/functions/` | Edge Functions: `embed` (gte-small embeddings) and `retention` (PDF deletion) |
+| `supabase/functions/` | Edge Functions: `embed` (gte-small embeddings), `retention` (PDF deletion) and `verify-arxiv` (arXiv lookup) |
 | `src/app/(public)/` | Home, learning center, readiness check, karma, availability pages, legal pages |
 | `src/app/app/` | The signed-in app: onboarding, feed, papers, reviews, notifications, settings, admin |
 | `content/learn/` | Learning-center articles (Markdown and frontmatter, CC BY 4.0) |
@@ -102,64 +103,54 @@ npm run dev                         # http://localhost:3000
 
 OAuth providers need real credentials even locally. Put them in your shell env as `SUPABASE_AUTH_{LINKEDIN,GOOGLE,GITHUB}_{CLIENT_ID,SECRET}` before `supabase start`. The local stack also enables email/password **only** so the end-to-end tests can create sessions.
 
-### 2. Create the Supabase project
+### 2. Deploy (no secrets to copy between dashboards)
 
-1. Create a project at [supabase.com](https://supabase.com) (the Free plan is fine to start).
-2. Link and push the schema:
-   ```bash
-   supabase link --project-ref <project-ref>
-   supabase db push
-   supabase functions deploy
-   ```
-3. **Vault secrets for cron → Edge Functions.** In the SQL editor, run:
-   ```sql
-   select vault.create_secret('https://<project-ref>.supabase.co', 'project_url');
-   select vault.create_secret('<service-role-key>', 'service_role_key');
-   ```
-   Also enable the **pg_net** extension (Database → Extensions) if it isn't already on.
-4. **Make yourself a moderator** after signing in once:
-   ```sql
-   update profiles set role = 'moderator' where handle = '<your-handle>';
-   ```
+The hosted app needs **no server secret**: arXiv verification runs in a Supabase Edge Function, and pg_cron authenticates to Edge Functions with a token generated inside the database. The only values the app needs are public (Supabase URL, anon key, site URL).
 
-### 3. Enable sign-in providers (Supabase dashboard → Authentication → Providers)
-
-Set the **Site URL** to your production URL and add `https://<your-domain>/auth/callback` to **Redirect URLs**. The provider callback URL for all three below is `https://<project-ref>.supabase.co/auth/v1/callback`.
-
-- **LinkedIn (OIDC)**: in the [LinkedIn developer portal](https://www.linkedin.com/developers/apps), create an app, add the *Sign In with LinkedIn using OpenID Connect* product, and paste the callback URL above as an authorized redirect. Copy the Client ID and secret into the **LinkedIn (OIDC)** provider.
-- **Google**: in Google Cloud Console, go to APIs & Services → Credentials → OAuth client ID (Web). Use the callback URL above as the redirect URI, and configure the consent screen.
-- **GitHub**: in GitHub → Settings → Developer settings → OAuth Apps, create an app with the callback URL above. The GitHub username is stored on the profile automatically.
-- **Email**: turn it **off** in production. The product sends no email and has no magic links.
-
-Hugging Face: users add their username on their profile. See `DECISIONS.md` for why Sign in with Hugging Face isn't used.
-
-### 4. Deploy the app to Cloudflare Workers
+**Supabase** — either ask Claude with the Supabase connector enabled ("apply the migrations and deploy the Edge Functions to project X"), or with the CLI:
 
 ```bash
-npx wrangler login
-npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
-NEXT_PUBLIC_SUPABASE_URL=... NEXT_PUBLIC_SUPABASE_ANON_KEY=... NEXT_PUBLIC_SITE_URL=https://your-domain npm run deploy
+supabase link --project-ref <project-ref>
+supabase db push                 # schema, RLS, functions, cron jobs, storage buckets, cron token
+supabase functions deploy        # embed, retention, verify-arxiv (JWT settings come from config.toml)
 ```
 
-`NEXT_PUBLIC_*` values are inlined at **build** time, so they must be present when `npm run deploy` runs. `npm run preview` runs the Worker locally in workerd; put the same values in `.dev.vars`.
+Then run once in the SQL editor so cron can reach the Edge Functions, and enable the **pg_net** extension if it isn't already on:
 
-**Bundle size.** The Worker bundle is about 2.3 MiB gzipped today. Cloudflare's Workers Free plan caps bundles at 3 MiB, and the Paid plan ($5/month) at 10 MiB. We target the Paid plan for headroom (and for its CPU limits), but it currently fits on Free.
+```sql
+select vault.create_secret('https://<project-ref>.supabase.co', 'project_url');
+```
 
-### 5. Continuous deployment
+To apply future migrations automatically on every push to `main`, connect the repo under **Project Settings → Integrations → GitHub** (Supabase directory: `supabase`, production branch: `main`).
 
-`.github/workflows/ci.yml` runs on every PR: lint, typecheck, unit tests, build, pgTAP against a local Supabase, and Playwright end-to-end tests. `.github/workflows/deploy.yml` runs on every push to `main`. It runs CI, then `supabase db push`, `supabase functions deploy`, and `npm run deploy`. Add these **repository secrets**:
+**Cloudflare Workers** — connect the GitHub repo once; every push to `main` then builds and deploys:
 
-| Secret | Where to find it |
-|---|---|
-| `SUPABASE_ACCESS_TOKEN` | supabase.com → Account → Access Tokens |
-| `SUPABASE_PROJECT_ID` | Project ref (in the project URL) |
-| `SUPABASE_DB_PASSWORD` | Set at project creation (Settings → Database) |
-| `SUPABASE_SERVICE_ROLE_KEY` | Settings → API |
-| `NEXT_PUBLIC_SUPABASE_URL` | Settings → API |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Settings → API |
-| `NEXT_PUBLIC_SITE_URL` | Your production URL, e.g. `https://endorsecommons.org` |
-| `CLOUDFLARE_API_TOKEN` | Cloudflare → My Profile → API Tokens ("Edit Cloudflare Workers" template) |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare dashboard sidebar |
+1. Workers & Pages → **Create** → **Import a repository** → authorize the Cloudflare GitHub app → pick this repo.
+2. Project name **`endorse-commons`** (must match `name` in `wrangler.jsonc`), production branch `main`.
+3. Build command `npx opennextjs-cloudflare build`, deploy command `npx opennextjs-cloudflare deploy`.
+4. Build variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SITE_URL` (they're inlined at build time).
+5. Optional: Worker → Settings → Domains & Routes → add your custom domain, then update `NEXT_PUBLIC_SITE_URL` and redeploy.
+
+Manual alternative: `npx wrangler login`, then `NEXT_PUBLIC_SUPABASE_URL=… NEXT_PUBLIC_SUPABASE_ANON_KEY=… NEXT_PUBLIC_SITE_URL=… npm run deploy`. `npm run preview` runs the Worker locally (values in `.dev.vars`).
+
+**Bundle size:** about 2.3 MiB gzipped, under the Workers Free plan's 3 MiB cap (Paid, $5/month, allows 10 MiB).
+
+### 3. Enable sign-in providers (Supabase dashboard → Authentication)
+
+Under **URL Configuration** set the **Site URL** to your production URL and add `https://<your-domain>/auth/callback` to **Redirect URLs**. Under **Providers**, paste each provider's Client ID and secret; the callback URL to register with every provider is `https://<project-ref>.supabase.co/auth/v1/callback`.
+
+- **GitHub** (≈2 min): GitHub → Settings → Developer settings → OAuth Apps → New. The GitHub username is stored on the profile automatically.
+- **Google** (≈10 min): Google Cloud Console → APIs & Services → OAuth consent screen (External; skip the logo at first to avoid branding review), then Credentials → OAuth client ID (Web application).
+- **LinkedIn (OIDC)** (≈10 min): [LinkedIn developer portal](https://www.linkedin.com/developers/apps) → Create app (must be linked to a LinkedIn Company Page) → Products → *Sign In with LinkedIn using OpenID Connect*.
+- **Email**: turn it **off**. The product sends no email and has no magic links.
+
+You can launch with GitHub and Google and add LinkedIn later; no code change is needed. Hugging Face: users add their username on their profile (see `DECISIONS.md`).
+
+**Make yourself a moderator** after signing in once: `update profiles set role = 'moderator' where handle = '<your-handle>';`
+
+### 4. Continuous integration
+
+`.github/workflows/ci.yml` runs on pull requests: lint, typecheck, unit tests, build, pgTAP against a local Supabase, and Playwright. It uses `supabase/setup-cli`; if your organization restricts third-party actions, allow it under **Organization settings → Actions → General**. Deployment doesn't depend on GitHub Actions.
 
 ### When to move Supabase from Free to Pro
 
@@ -175,7 +166,6 @@ Free is fine for building and a soft launch. Move to **Pro** when:
 |---|---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | build + runtime | Supabase API URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | build + runtime | Public anon key (RLS applies) |
-| `SUPABASE_SERVICE_ROLE_KEY` | server only | Used only for arXiv-verification writes and orphan cleanup. Worker secret. |
 | `NEXT_PUBLIC_SITE_URL` | build | Canonical URLs, sitemap, OAuth redirect |
 | `APP_NAME` | runtime | Defaults to "Endorse Commons" (set in `wrangler.jsonc`) |
 

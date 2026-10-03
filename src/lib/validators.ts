@@ -16,14 +16,7 @@ export function orcidValid(orcid: string): boolean {
   return (r === 10 ? "X" : String(r)) === digits[15];
 }
 
-/** Accepts "2401.12345", "2401.12345v2", "arXiv:2401.12345", abs/pdf URLs and old-style ids. Returns the bare id. */
-export function parseArxivId(input: string): string | null {
-  const s = input.trim().replace(/^arxiv:/i, "");
-  const url = s.match(/arxiv\.org\/(?:abs|pdf)\/([^?#\s]+?)(?:\.pdf)?(?:[?#].*)?$/i);
-  const raw = url ? url[1] : s;
-  const m = raw.match(/^(\d{4}\.\d{4,5}|[a-z-]+(?:\.[A-Z]{2})?\/\d{7})(v\d+)?$/);
-  return m ? m[1] : null;
-}
+export { parseArxivId } from "./arxiv";
 
 export function suggestHandle(name: string): string {
   const base = name.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");

@@ -1,11 +1,11 @@
 // Edge Function `retention`: deletes full-paper PDFs 30 days (platform_config.retention_days_after_close)
-// after a paper closes, then nulls storage_path and stamps deleted_at on the version.
-import { isServiceCall, removeObjects, rpc } from "../_shared/auth.ts";
+// after a paper closes, then nulls storage_path and stamps deleted_at on the version. Invoked by pg_cron.
+import { isCronCall, removeObjects, rpc } from "../_shared/auth.ts";
 
 type Due = { version_id: string; storage_path: string };
 
 Deno.serve(async (req) => {
-  if (!isServiceCall(req)) return new Response("Forbidden", { status: 403 });
+  if (!(await isCronCall(req))) return new Response("Forbidden", { status: 403 });
   try {
     const due = await rpc<Due[]>("versions_due_for_deletion", { p_limit: 200 });
     let deleted = 0;
@@ -18,7 +18,10 @@ Deno.serve(async (req) => {
         console.error("retention failed", v.version_id, err);
       }
     }
-    return Response.json({ due: due?.length ?? 0, deleted });
+    // uploads whose version row was never created (e.g. the RPC failed after the upload)
+    const orphans = await rpc<{ name: string }[]>("orphaned_paper_objects", { p_limit: 200 });
+    if (orphans?.length) await removeObjects("papers", orphans.map((o) => o.name));
+    return Response.json({ due: due?.length ?? 0, deleted, orphans_removed: orphans?.length ?? 0 });
   } catch (err) {
     return Response.json({ error: String(err) }, { status: 500 });
   }

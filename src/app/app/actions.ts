@@ -5,10 +5,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { ActionState } from "@/components/ActionForm";
 import { ActionError, friendlyError, optStr, rpc, run, str } from "@/lib/actions";
-import { authorNameMatches, fetchArxivRecord } from "@/lib/arxiv";
 import { getMyProfile, requireProfile } from "@/lib/auth";
 import { fetchWorks, searchAuthors, type OpenAlexAuthor } from "@/lib/openalex";
-import { createAdminClient, createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { ENDORSEMENT_CODE_RE, EVIDENCE_RE, LINKEDIN_RE, orcidValid, parseArxivId } from "@/lib/validators";
 
 const numList = (fd: FormData, key: string) => fd.getAll(key).map((v) => Number(v)).filter((n) => Number.isFinite(n) && n > 0);
@@ -284,12 +283,8 @@ export async function uploadVersionAction(_prev: ActionState, fd: FormData): Pro
     const path = `${id}/${crypto.randomUUID().replace(/-/g, "")}.pdf`;
     const { error: upErr } = await supabase.storage.from("papers").upload(path, buf, { contentType: "application/pdf" });
     if (upErr) throw new ActionError("Upload failed. Is the paper still open?");
-    try {
-      await rpc(supabase, "upload_version", { p_paper: id, p_storage_path: path, p_sha256: sha, p_size_bytes: file.size, p_note: optStr(fd, "note") });
-    } catch (e) {
-      try { await createAdminClient().storage.from("papers").remove([path]); } catch { /* best effort */ }
-      throw e;
-    }
+    // if this fails, the uploaded object is an orphan; the daily retention job removes it
+    await rpc(supabase, "upload_version", { p_paper: id, p_storage_path: path, p_sha256: sha, p_size_bytes: file.size, p_note: optStr(fd, "note") });
     revalidatePath(`/app/papers/${id}`);
     return "New version uploaded. Active reviewers were notified.";
   });
@@ -341,26 +336,21 @@ export async function sendNudgeAction(_prev: ActionState, fd: FormData): Promise
 
 export async function verifyArxivAction(_prev: ActionState, fd: FormData): Promise<ActionState> {
   return run(async () => {
-    const { user, profile } = await requireProfile();
+    const { supabase } = await requireProfile();
     const paperId = str(fd, "paper_id");
     const id = parseArxivId(str(fd, "arxiv_id"));
     if (!id) throw new ActionError("That doesn't look like an arXiv ID (e.g. 2409.12345).");
-    let record;
-    try {
-      record = await fetchArxivRecord(id);
-    } catch {
-      throw new ActionError("The arXiv API didn't respond. Please try again in a few minutes.");
-    }
-    if (!record) throw new ActionError("arXiv has no paper with that ID yet. New submissions appear after they are announced.");
-    const matched = authorNameMatches(profile.display_name, record.authors);
-    let admin;
-    try { admin = createAdminClient(); } catch { throw new ActionError("Verification is not configured on this server."); }
-    const { error } = await admin.rpc("verify_arxiv_posting", {
-      p_actor: user.id, p_paper: paperId, p_arxiv_id: id, p_arxiv_categories: record.categories, p_author_matched: matched,
+    // The `verify-arxiv` Edge Function queries the arXiv API and records the result with the service role.
+    const { data, error } = await supabase.functions.invoke<{ verified?: boolean; title?: string }>("verify-arxiv", {
+      body: { paper_id: paperId, arxiv_id: id },
     });
-    if (error) throw new ActionError(friendlyError(error));
+    if (error) {
+      let message = "Verification failed. Please try again.";
+      try { message = ((await (error as { context?: Response }).context?.json()) as { error?: string })?.error ?? message; } catch { /* keep default */ }
+      throw new ActionError(message);
+    }
     revalidatePath(`/app/papers/${paperId}`);
-    return `Verified: “${record.title}” is posted on arXiv. Your endorser's track record has been updated.`;
+    return `Verified: “${data?.title ?? id}” is posted on arXiv. Your endorser's track record has been updated.`;
   });
 }
 

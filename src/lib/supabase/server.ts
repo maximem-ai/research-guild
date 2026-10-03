@@ -27,10 +27,3 @@ export function createAnonClient() {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }
-
-/** Service-role client. Server only; used solely for arXiv verification writes. */
-export function createAdminClient() {
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!key) throw new Error("SUPABASE_SERVICE_ROLE_KEY is not set");
-  return createPlainClient(SUPABASE_URL, key, { auth: { persistSession: false, autoRefreshToken: false } });
-}

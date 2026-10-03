@@ -64,8 +64,13 @@ secret = "env(SUPABASE_AUTH_GITHUB_SECRET)"
 enabled = true
 policy = "oneshot"
 
+# embed/retention are called by pg_cron and check the generated Vault `cron_token` themselves.
 [functions.embed]
-verify_jwt = true
+verify_jwt = false
 
 [functions.retention]
+verify_jwt = false
+
+# verify-arxiv is called by signed-in authors with their own JWT.
+[functions.verify-arxiv]
 verify_jwt = true
