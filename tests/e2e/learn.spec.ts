@@ -56,3 +56,12 @@ test("app routes require sign-in", async ({ page }) => {
   await page.goto("/app/feed");
   await expect(page).toHaveURL(/\/login\?next=%2Fapp%2Ffeed/);
 });
+
+test("login shows exactly the providers enabled in Supabase", async ({ page, request }) => {
+  test.skip(!process.env.NEXT_PUBLIC_SUPABASE_URL, "needs Supabase");
+  const settings = await (await request.get(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/settings`,
+    { headers: { apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY! } })).json();
+  const expected = [["github", "GitHub"], ["google", "Google"], ["linkedin_oidc", "LinkedIn"]].filter(([id]) => settings.external[id]).map(([, n]) => `Continue with ${n}`);
+  await page.goto("/login");
+  await expect(page.getByRole("button", { name: /^Continue with/ })).toHaveText(expected);
+});

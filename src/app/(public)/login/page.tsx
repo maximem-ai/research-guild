@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { enabledProviders, PROVIDERS } from "@/lib/auth-providers";
 import { APP_NAME, MIN_AGE } from "@/lib/env";
 import { signInWith } from "./actions";
 
 export const metadata: Metadata = { title: "Sign in", robots: { index: false } };
 
-const PROVIDERS = [
-  { id: "linkedin_oidc", label: "Continue with LinkedIn" },
-  { id: "google", label: "Continue with Google" },
-  { id: "github", label: "Continue with GitHub" },
-];
-
 export default async function Login({ searchParams }: { searchParams: Promise<{ next?: string; error?: string }> }) {
   const { next, error } = await searchParams;
+  const enabled = await enabledProviders();
+  const providers = PROVIDERS.filter((p) => enabled.includes(p.id));
   return (
     <div className="container-page max-w-md py-16">
       <h1 className="h1">Sign in to {APP_NAME}</h1>
@@ -21,7 +18,10 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
       </p>
       {error && <p role="alert" className="alert alert-error mt-4">Sign-in failed. Please try again.</p>}
       <div className="mt-6 space-y-3">
-        {PROVIDERS.map((p) => (
+        {providers.length === 0 && (
+          <p className="alert">Sign-in isn&apos;t available yet. Please check back soon; the learning center is open to everyone.</p>
+        )}
+        {providers.map((p) => (
           <form key={p.id} action={signInWith}>
             <input type="hidden" name="provider" value={p.id} />
             <input type="hidden" name="next" value={next ?? "/app"} />

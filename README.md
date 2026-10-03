@@ -144,7 +144,7 @@ Under **URL Configuration** set the **Site URL** to your production URL and add 
 - **LinkedIn (OIDC)** (≈10 min): [LinkedIn developer portal](https://www.linkedin.com/developers/apps) → Create app (must be linked to a LinkedIn Company Page) → Products → *Sign In with LinkedIn using OpenID Connect*.
 - **Email**: turn it **off**. The product sends no email and has no magic links.
 
-You can launch with GitHub and Google and add LinkedIn later; no code change is needed. Hugging Face: users add their username on their profile (see `DECISIONS.md`).
+The login page shows only the providers you've enabled, so you can launch with just one (for example GitHub) and enable others later without a code change or redeploy. Hugging Face: users add their username on their profile (see `DECISIONS.md`).
 
 **Make yourself a moderator** after signing in once: `update profiles set role = 'moderator' where handle = '<your-handle>';`
 
