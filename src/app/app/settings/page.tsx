@@ -14,6 +14,7 @@ import {
   attestCapabilityAction, createPledgeAction, declinePledgeAction, removeCapabilityAction, setAvailabilityAction,
   unlinkOpenAlexAction, updateCapabilityAction, uploadAvatarAction,
 } from "../actions";
+import { AddPaperForm, RemovePaperButton } from "@/components/AddPaperForm";
 
 export default async function Settings({ searchParams }: { searchParams: Promise<{ welcome?: string }> }) {
   const { welcome } = await searchParams;
@@ -23,12 +24,14 @@ export default async function Settings({ searchParams }: { searchParams: Promise
     supabase.from("profile_categories").select("category_code").eq("user_id", profile.id),
     supabase.from("profile_interests").select("topic_id").eq("user_id", profile.id),
     supabase.from("endorser_capabilities").select("*").eq("user_id", profile.id).order("category_code"),
-    supabase.from("profile_publications").select("id, title, venue, year, url").eq("user_id", profile.id).order("year", { ascending: false }),
+    supabase.from("profile_publications").select("id, source, title, venue, year, url").eq("user_id", profile.id).order("year", { ascending: false, nullsFirst: false }),
     supabase.from("pledges").select("id, category_code, status, remind_on").eq("user_id", profile.id),
     supabase.from("badges").select("badge, awarded_at").eq("user_id", profile.id),
     supabase.from("engagements").select("id", { count: "exact", head: true }).eq("endorser_id", profile.id).eq("state", "reviewing"),
   ]);
   const capabilities = (caps.data ?? []) as Capability[];
+  const added = (pubs.data ?? []).filter((p) => p.source !== "openalex");
+  const openalex = (pubs.data ?? []).filter((p) => p.source === "openalex");
   const maxSlots = Math.max(0, ...capabilities.filter((c) => c.accepting && c.status !== "suspended").map((c) => c.max_active_reviews));
   const openSlots = Math.max(0, maxSlots - (reviewing.count ?? 0));
   const pageUrl = `${SITE_URL}/e/${profile.handle}`;
@@ -68,17 +71,33 @@ export default async function Settings({ searchParams }: { searchParams: Promise
       <section className="card" aria-labelledby="pubs-h">
         <h2 id="pubs-h" className="h2">Past papers</h2>
         <p className="mt-1 text-sm muted">
-          <Term slug="google-scholar">Google Scholar</Term> has no public API, so we list papers from <Term slug="openalex">OpenAlex</Term> instead: find your author record and pick it.
+          <Term slug="google-scholar">Google Scholar</Term> has no public API, so we list papers from <Term slug="openalex">OpenAlex</Term>, and you can add
+          any paper by its arXiv ID or DOI. We look each one up and check that your profile name is on its author list.
         </p>
-        <div className="mt-4"><OpenAlexFinder defaultName={profile.display_name} /></div>
-        {(pubs.data ?? []).length > 0 && (
+        <h3 className="mt-5 text-sm font-semibold">Add a paper</h3>
+        <div className="mt-2"><AddPaperForm /></div>
+        {added.length > 0 && (
+          <ul className="mt-3 space-y-1 text-sm">
+            {added.map((p) => (
+              <li key={p.id} className="flex items-start justify-between gap-3">
+                <span>{p.url ? <a className="link" href={p.url} target="_blank" rel="noopener noreferrer">{p.title}</a> : p.title} <span className="muted">{[p.venue, p.year].filter(Boolean).join(", ")}</span></span>
+                <RemovePaperButton id={p.id} />
+              </li>
+            ))}
+          </ul>
+        )}
+        <h3 className="mt-6 text-sm font-semibold">Find your OpenAlex record</h3>
+        <div className="mt-2"><OpenAlexFinder defaultName={profile.display_name} /></div>
+        {openalex.length > 0 && (
           <>
             <p className="mt-4 text-xs muted">From OpenAlex; user-selected ({profile.openalex_author_id}).</p>
             <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
-              {(pubs.data ?? []).map((p) => <li key={p.id}>{p.url ? <a className="link" href={p.url} target="_blank" rel="noopener noreferrer">{p.title}</a> : p.title} <span className="muted">{[p.venue, p.year].filter(Boolean).join(", ")}</span></li>)}
+              {openalex.map((p) => <li key={p.id}>{p.url ? <a className="link" href={p.url} target="_blank" rel="noopener noreferrer">{p.title}</a> : p.title} <span className="muted">{[p.venue, p.year].filter(Boolean).join(", ")}</span></li>)}
             </ul>
-            <ActionForm action={unlinkOpenAlexAction} className="mt-3"><SubmitButton className="btn btn-sm">Unlink OpenAlex</SubmitButton></ActionForm>
           </>
+        )}
+        {profile.openalex_author_id && (
+          <ActionForm action={unlinkOpenAlexAction} className="mt-3"><SubmitButton className="btn btn-sm">Unlink OpenAlex</SubmitButton></ActionForm>
         )}
       </section>
 

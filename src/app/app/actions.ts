@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import type { ActionState } from "@/components/ActionForm";
 import { ActionError, friendlyError, optStr, rpc, run, str } from "@/lib/actions";
 import { getMyProfile, requireProfile } from "@/lib/auth";
-import { fetchWorks, searchAuthors, type OpenAlexAuthor } from "@/lib/openalex";
+import type { OpenAlexAuthor, OpenAlexWork } from "@/lib/openalex";
 import { createClient } from "@/lib/supabase/server";
 import { ENDORSEMENT_CODE_RE, EVIDENCE_RE, LINKEDIN_RE, orcidValid, parseArxivId } from "@/lib/validators";
 
@@ -76,18 +76,27 @@ export async function setAvailabilityAction(_prev: ActionState, fd: FormData): P
   });
 }
 
+/** Calls the `scholar` Edge Function (OpenAlex/arXiv lookups run on Supabase, not in the Worker). */
+async function scholar<T>(supabase: Awaited<ReturnType<typeof createClient>>, body: Record<string, unknown>): Promise<T> {
+  const { data, error } = await supabase.functions.invoke<T>("scholar", { body });
+  if (error) {
+    let message = "The paper lookup failed. Please try again.";
+    try { message = ((await (error as { context?: Response }).context?.json()) as { error?: string })?.error ?? message; } catch { /* keep default */ }
+    throw new ActionError(message);
+  }
+  return data as T;
+}
+
 export async function searchOpenAlexAction(_prev: ActionState, fd: FormData): Promise<ActionState> {
   return run(async () => {
-    await requireProfile();
+    const { supabase } = await requireProfile();
     const q = str(fd, "q");
     if (q.length < 3) throw new ActionError("Type at least 3 characters of your name.");
-    let authors: OpenAlexAuthor[] = [];
-    try {
-      authors = await searchAuthors(q);
-    } catch {
-      throw new ActionError("OpenAlex didn't respond. This is optional; try again later.");
-    }
-    return { data: authors, ok: authors.length ? undefined : "No matching OpenAlex authors found." };
+    const { authors } = await scholar<{ authors: OpenAlexAuthor[] }>(supabase, { action: "search_authors", q });
+    return {
+      data: authors,
+      ok: authors.length ? undefined : "OpenAlex has no author record with that name. Add your papers by arXiv ID or DOI below.",
+    };
   });
 }
 
@@ -96,15 +105,32 @@ export async function linkOpenAlexAction(_prev: ActionState, fd: FormData): Prom
     const { supabase } = await requireProfile();
     const id = str(fd, "author_id");
     if (!/^A\d+$/.test(id)) throw new ActionError("Pick an author record.");
-    let works: Awaited<ReturnType<typeof fetchWorks>> = [];
-    try {
-      works = await fetchWorks(id);
-    } catch {
-      throw new ActionError("OpenAlex didn't respond. This is optional; try again later.");
-    }
+    const { works } = await scholar<{ works: OpenAlexWork[] }>(supabase, { action: "author_works", author_id: id });
     const n = await rpc<number>(supabase, "set_openalex_publications", { p_author_id: id, p_works: works });
     revalidatePath("/app/settings");
     return `Linked. ${n} recent publications listed on your profile.`;
+  });
+}
+
+export async function addPaperAction(_prev: ActionState, fd: FormData): Promise<ActionState> {
+  return run(async () => {
+    const { supabase } = await requireProfile();
+    const ref = str(fd, "ref");
+    if (!ref) throw new ActionError("Enter an arXiv ID, arXiv link or DOI.");
+    const { title } = await scholar<{ title: string }>(supabase, { action: "add_paper", ref });
+    revalidatePath("/app/settings");
+    return `Added “${title}” to your profile.`;
+  });
+}
+
+export async function removePaperAction(_prev: ActionState, fd: FormData): Promise<ActionState> {
+  return run(async () => {
+    const { supabase } = await requireProfile();
+    const id = Number(str(fd, "id"));
+    if (!Number.isInteger(id) || id <= 0) throw new ActionError("Paper not found.");
+    await rpc(supabase, "remove_publication", { p_id: id });
+    revalidatePath("/app/settings");
+    return "Paper removed.";
   });
 }
 

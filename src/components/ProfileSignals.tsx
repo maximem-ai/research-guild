@@ -52,7 +52,7 @@ export async function ProfileSignals({ profile, supabaseClient, compact }: { pro
       )}
       {(pubs.data ?? []).length > 0 && (
         <div>
-          <p className="text-xs muted">Past papers — from OpenAlex; user-selected</p>
+          <p className="text-xs muted">Past papers: added by arXiv ID or DOI (author name checked) or from the OpenAlex record they picked</p>
           <ul className="mt-1 list-disc pl-5 text-sm">
             {(pubs.data ?? []).map((p) => <li key={p.id}>{p.url ? <a className="link" href={p.url} target="_blank" rel="noopener noreferrer">{p.title}</a> : p.title} <span className="muted">{[p.venue, p.year].filter(Boolean).join(", ")}</span></li>)}
           </ul>

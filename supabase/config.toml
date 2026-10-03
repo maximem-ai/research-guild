@@ -74,3 +74,7 @@ verify_jwt = false
 # verify-arxiv is called by signed-in authors with their own JWT.
 [functions.verify-arxiv]
 verify_jwt = true
+
+# scholar (past-paper lookups) is called by signed-in members with their own JWT.
+[functions.scholar]
+verify_jwt = true

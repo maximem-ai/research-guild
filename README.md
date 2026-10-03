@@ -50,7 +50,7 @@ flowchart LR
     Cron[pg_cron<br/>expiry · waitlists · reminders]
     Storage[(Storage<br/>private papers · public avatars)]
     RT[Realtime]
-    Edge[Edge Functions<br/>embed · retention · verify-arxiv]
+    Edge[Edge Functions<br/>embed · retention · verify-arxiv · scholar]
     Vec[(pgvector<br/>gte-small)]
   end
   arXiv[[arXiv API]]
@@ -64,7 +64,7 @@ flowchart LR
   Next -- user JWT --> Edge
   Next --> Auth
   Edge -. verify posting .-> arXiv
-  Next -. find my papers .-> OA
+  Edge -. find my papers .-> OA
   Next -. public counts .-> HF
   Bell --> RT --> PG
   Cron --> PG
@@ -78,8 +78,8 @@ flowchart LR
 | Path | What |
 |---|---|
 | `supabase/migrations/` | Schema, reference data (categories and topics), RPCs and triggers, RLS and views, storage policies, cron jobs |
-| `supabase/tests/` | pgTAP tests: state machine, waitlist, fan-out, karma, RLS, trust features, cron (140 assertions) |
-| `supabase/functions/` | Edge Functions: `embed` (gte-small embeddings), `retention` (PDF deletion) and `verify-arxiv` (arXiv lookup) |
+| `supabase/tests/` | pgTAP tests: state machine, waitlist, fan-out, karma, RLS, trust features, cron (148 assertions) |
+| `supabase/functions/` | Edge Functions: `embed` (gte-small embeddings), `retention` (PDF deletion), `verify-arxiv` (arXiv lookup) and `scholar` (past-paper lookups via OpenAlex and arXiv) |
 | `src/app/(public)/` | Home, learning center, readiness check, karma, availability pages, legal pages |
 | `src/app/app/` | The signed-in app: onboarding, feed, papers, reviews, notifications, settings, admin |
 | `content/learn/` | Learning-center articles (Markdown and frontmatter, CC BY 4.0) |
@@ -112,7 +112,7 @@ The hosted app needs **no server secret**: arXiv verification runs in a Supabase
 ```bash
 supabase link --project-ref <project-ref>
 supabase db push                 # schema, RLS, functions, cron jobs, storage buckets, cron token
-supabase functions deploy        # embed, retention, verify-arxiv (JWT settings come from config.toml)
+supabase functions deploy        # embed, retention, verify-arxiv, scholar (JWT settings come from config.toml)
 ```
 
 Then run once in the SQL editor so cron can reach the Edge Functions, and enable the **pg_net** extension if it isn't already on:
