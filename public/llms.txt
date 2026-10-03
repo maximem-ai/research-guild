@@ -1,5 +1,5 @@
 # ResearchGuild
-> Get your first paper reviewed and endorsed. First-time researchers post an abstract, get feedback from people who have published, and find an arXiv endorser in their field. Free and open source (AGPL-3.0); not affiliated with arXiv.
+> Get honest feedback on your paper before publishing, and find someone to endorse you for your first paper in a domain. Authors post an abstract, revise with people who have published, and find an arXiv endorser in their field. Free and open source (AGPL-3.0); not affiliated with arXiv.
 
 ## Start here
 - [Home and FAQ](https://researchguild.org/#faq): how to find an endorser and how to become one

@@ -8,7 +8,7 @@ export default function About() {
   return (
     <article className="container-page max-w-3xl py-12 prose-learn">
       <h1 className="h1">About {APP_NAME}</h1>
-      <p><strong>Get your first paper reviewed and endorsed.</strong></p>
+      <p><strong>Get honest feedback on your paper before publishing, and find someone to endorse you for your first paper in a domain.</strong></p>
       <p>
         On {APP_NAME}, first-time researchers (students, young learners and independent researchers anywhere) learn how arXiv works,
         revise their paper with people who have published, and find an endorser in their field. Endorsers choose the abstracts they

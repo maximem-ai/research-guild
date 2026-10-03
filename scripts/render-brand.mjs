@@ -44,8 +44,8 @@ function card() {
     <img src="${markUri}" width="72" height="72"><span style="font:700 34px ${SERIF};color:#fafafa">ResearchGuild</span>
   </div>
   <div style="position:absolute;left:96px;top:206px;width:640px">
-    <div style="font:700 60px/1.08 ${SERIF};color:#fafafa;letter-spacing:-.01em">Get your first paper reviewed and endorsed.</div>
-    <div style="margin-top:22px;font:400 25px/1.4 ${SANS};color:#a3a3a3">Feedback from people who have published, and a path to an arXiv endorsement.</div>
+    <div style="font:700 60px/1.08 ${SERIF};color:#fafafa;letter-spacing:-.01em">Get feedback before publishing, and get endorsed.</div>
+    <div style="margin-top:22px;font:400 25px/1.4 ${SANS};color:#a3a3a3">Honest feedback on your paper, and someone to endorse you for your first paper in a domain.</div>
   </div>
   <div style="position:absolute;left:96px;bottom:58px;font:500 22px ${MONO};color:#ff8a47">Free · open source · researchguild.org</div>
   <div style="position:absolute;right:110px;top:84px">${paper({ dark: true })}</div>
@@ -61,7 +61,7 @@ function banner(theme) {
   <div style="position:absolute;left:80px;top:70px;display:flex;align-items:center;gap:18px">
     <img src="${markUri}" width="64" height="64"><span style="font:700 46px ${SERIF};color:${fg}">ResearchGuild</span>
   </div>
-  <div style="position:absolute;left:80px;top:168px;width:700px;font:600 34px/1.25 ${SERIF};color:${fg}">Get your first paper reviewed and endorsed.</div>
+  <div style="position:absolute;left:80px;top:168px;width:700px;font:600 34px/1.25 ${SERIF};color:${fg}">Get feedback before publishing, and get endorsed.</div>
   <div style="position:absolute;left:80px;top:262px;font:500 20px ${MONO};color:${dark ? "#ff8a47" : "#b3460a"}">Free · open source · researchguild.org</div>
   <div style="position:absolute;right:90px;top:34px;transform:scale(.62);transform-origin:top right">${paper({ dark })}</div>
 </body>`;

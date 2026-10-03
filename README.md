@@ -1,11 +1,11 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset=".github/banner-dark.png">
-    <img src=".github/banner-light.png" alt="ResearchGuild: get your first paper reviewed and endorsed" width="100%">
+    <img src=".github/banner-light.png" alt="ResearchGuild: get feedback before publishing, and get endorsed" width="100%">
   </picture>
 </p>
 
-<h3 align="center">Get your first paper reviewed and endorsed.</h3>
+<h3 align="center">Get honest feedback on your paper before publishing, and find someone to endorse you for your first paper in a domain.</h3>
 
 <p align="center">
   <a href="https://researchguild.org">Website</a> ·
