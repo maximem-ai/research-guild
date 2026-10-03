@@ -1,6 +1,6 @@
 # Security policy
 
-Endorse Commons handles unpublished manuscripts and endorsement codes, so we take security reports seriously.
+ResearchGuild handles unpublished manuscripts and endorsement codes, so we take security reports seriously.
 
 ## Reporting a vulnerability
 

@@ -2,7 +2,7 @@
 
 ## Maintainers
 
-Endorse Commons is built and maintained by the team at [Maximem](https://maximem.ai). The current maintainers are listed in the repository's GitHub team settings. Community maintainers are welcome: see "Becoming a maintainer" below.
+ResearchGuild is built and maintained by the team at [Maximem](https://maximem.ai). The current maintainers are listed in the repository's GitHub team settings. Community maintainers are welcome: see "Becoming a maintainer" below.
 
 Maintainers:
 - review and merge pull requests

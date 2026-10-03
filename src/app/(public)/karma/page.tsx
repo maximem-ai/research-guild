@@ -6,7 +6,7 @@ import { createAnonClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Karma — how helping newcomers is recognized",
-  description: "How karma works on Endorse Commons, the per-category leaderboards, and why endorsing and declining earn the same points.",
+  description: "How karma works on ResearchGuild, the per-category leaderboards, and why endorsing and declining earn the same points.",
   alternates: { canonical: "/karma" },
 };
 export const dynamic = "force-dynamic";

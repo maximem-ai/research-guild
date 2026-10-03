@@ -1,6 +1,6 @@
 # Supabase CLI config for local development (`supabase start`) and CI.
 # Production auth providers are configured in the Supabase dashboard (see README).
-project_id = "endorse-commons"
+project_id = "research-guild"
 
 [api]
 enabled = true

@@ -1,10 +1,12 @@
-# Endorse Commons
+# ResearchGuild
 
 **Anyone with a real contribution should be able to share it with the world.**
 
-Endorse Commons is a free, open-source community that helps first-time researchers (students, young learners and independent researchers anywhere) learn how open science works, get honest feedback from people who have published, and find someone willing to vouch for their work.
+ResearchGuild helps first-time researchers (students, young learners and independent researchers anywhere) get honest feedback on their first paper from people who have published, and find someone to endorse it on arXiv. It is free and open source, and its learning center needs no sign-in.
 
-> Endorse Commons is an independent project. It is **not affiliated with arXiv**. Thank you to arXiv for use of its open access interoperability. This service was not reviewed or approved by, nor does it necessarily express or reflect the policies or opinions of, arXiv.
+Live at [researchguild.org](https://researchguild.org).
+
+> ResearchGuild is an independent project. It is **not affiliated with arXiv**. Thank you to arXiv for use of its open access interoperability. This service was not reviewed or approved by, nor does it necessarily express or reflect the policies or opinions of, arXiv.
 
 ## Goals
 
@@ -93,7 +95,7 @@ You need Node 22, Docker, the [Supabase CLI](https://supabase.com/docs/guides/cl
 ### 1. Run it locally
 
 ```bash
-git clone https://github.com/maximem-ai/preprint_commons && cd preprint_commons
+git clone https://github.com/maximem-ai/research-guild && cd research-guild
 npm install
 supabase start                      # applies all migrations, starts Auth/Storage/Realtime/Edge
 supabase status                     # copy API URL, anon key, service_role key
@@ -167,7 +169,7 @@ Free is fine for building and a soft launch. Move to **Pro** when:
 | `NEXT_PUBLIC_SUPABASE_URL` | build + runtime | Supabase API URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | build + runtime | Public anon key (RLS applies) |
 | `NEXT_PUBLIC_SITE_URL` | build | Canonical URLs, sitemap, OAuth redirect |
-| `APP_NAME` | runtime | Defaults to "Endorse Commons" (set in `wrangler.jsonc`) |
+| `APP_NAME` | runtime | Defaults to "ResearchGuild" (set in `wrangler.jsonc`) |
 
 ## Testing
 

@@ -1,7 +1,7 @@
 // OpenAlex client (free, keyless) shared by the `scholar` Edge Function and the app's unit tests
 // (src/lib/openalex.ts re-exports it). No imports, so it runs in Deno, Workers and Node alike.
 const BASE = "https://api.openalex.org";
-const UA = { "User-Agent": "EndorseCommons/1.0 (+https://github.com/maximem-ai/preprint_commons)" };
+const UA = { "User-Agent": "ResearchGuild/1.0 (+https://researchguild.org)" };
 
 export type OpenAlexAuthor = { id: string; name: string; hint: string | null; works: number | null };
 export type OpenAlexWork = {

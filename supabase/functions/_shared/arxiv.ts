@@ -32,7 +32,7 @@ export function parseArxivAtom(xml: string): ArxivRecord | null {
 
 export async function fetchArxivRecord(id: string): Promise<ArxivRecord | null> {
   const res = await fetch(`https://export.arxiv.org/api/query?id_list=${encodeURIComponent(id)}&max_results=1`, {
-    headers: { "User-Agent": "EndorseCommons/1.0 (+https://github.com/maximem-ai/preprint_commons)" },
+    headers: { "User-Agent": "ResearchGuild/1.0 (+https://researchguild.org)" },
     signal: AbortSignal.timeout(10_000),
   });
   if (!res.ok) throw new Error(`arXiv API returned ${res.status}`);

@@ -15,7 +15,7 @@ export default function Glossary() {
   return (
     <div className="container-page max-w-3xl py-10">
       <JsonLd data={{
-        "@context": "https://schema.org", "@type": "DefinedTermSet", name: "Endorse Commons glossary", url: `${SITE_URL}/learn/glossary`,
+        "@context": "https://schema.org", "@type": "DefinedTermSet", name: "ResearchGuild glossary", url: `${SITE_URL}/learn/glossary`,
         hasDefinedTerm: GLOSSARY.map((t) => ({ "@type": "DefinedTerm", name: t.term, description: t.definition, url: `${SITE_URL}/learn/glossary#${t.slug}` })),
       }} />
       <nav aria-label="Breadcrumb" className="text-sm muted"><Link href="/learn" className="hover:underline">Learning center</Link> <span aria-hidden>›</span> Glossary</nav>

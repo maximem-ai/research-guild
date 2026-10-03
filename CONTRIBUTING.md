@@ -1,4 +1,4 @@
-# Contributing to Endorse Commons
+# Contributing to ResearchGuild
 
 Thank you for helping keep open science open. Contributions of code, learning-center articles, topic lists and translations are all welcome.
 

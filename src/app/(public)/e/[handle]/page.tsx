@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!r) return { title: "Not found", robots: { index: false } };
   const cats = r.profile.capabilities.map((c) => c.category).join(", ");
   const title = `${r.profile.display_name} — reviewing & endorsing in ${cats || "open science"}`;
-  const description = `${r.profile.display_name} gives pre-submission feedback to first-time researchers on Endorse Commons. ${r.profile.open_slots} review slot${r.profile.open_slots === 1 ? "" : "s"} open.`;
+  const description = `${r.profile.display_name} gives pre-submission feedback to first-time researchers on ResearchGuild. ${r.profile.open_slots} review slot${r.profile.open_slots === 1 ? "" : "s"} open.`;
   return { title, description, alternates: { canonical: `/e/${r.profile.handle}` }, openGraph: { title, description, type: "profile" } };
 }
 

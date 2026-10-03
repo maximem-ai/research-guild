@@ -1,6 +1,6 @@
 # Contributor Covenant Code of Conduct
 
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1. It applies to the Endorse Commons repository and to the Endorse Commons community itself (profiles, feedback threads and reports).
+This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1. It applies to the ResearchGuild repository and to the ResearchGuild community itself (profiles, feedback threads and reports).
 
 ## Our Pledge
 

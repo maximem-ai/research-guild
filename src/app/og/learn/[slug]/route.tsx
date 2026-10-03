@@ -16,7 +16,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
     (
       <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between",
         padding: 72, background: "#0a0a0a", color: "#f2f2f2", borderTop: "14px solid #ff6a13", fontFamily: "serif" }}>
-        <div style={{ display: "flex", fontSize: 28, color: "#ff6a13" }}>Endorse Commons · Learning center</div>
+        <div style={{ display: "flex", fontSize: 28, color: "#ff6a13" }}>ResearchGuild · Learning center</div>
         <div style={{ display: "flex", fontSize: title.length > 70 ? 54 : 66, lineHeight: 1.15, fontWeight: 700 }}>{title}</div>
         <div style={{ display: "flex", fontSize: 24, color: "#a3a3a3" }}>Free answers for first-time researchers · no sign-in</div>
       </div>

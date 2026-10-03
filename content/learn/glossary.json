@@ -19,7 +19,7 @@
     },
     {
       "id": "platform",
-      "title": "On Endorse Commons"
+      "title": "On ResearchGuild"
     },
     {
       "id": "identity",
@@ -71,7 +71,7 @@
       "aliases": [
         "abstracts"
       ],
-      "definition": "A short summary of a paper: the problem, what you did and what you found. On Endorse Commons, only the abstract is shown until you choose who reads the full paper.",
+      "definition": "A short summary of a paper: the problem, what you did and what you found. On ResearchGuild, only the abstract is shown until you choose who reads the full paper.",
       "article": "what-to-send-an-endorser"
     },
     {
@@ -146,7 +146,7 @@
       "aliases": [
         "sub-topics"
       ],
-      "definition": "An Endorse Commons tag inside a category, such as “Agents & planning” in cs.AI. Authors tag papers with 1–3 sub-topics and endorsers follow the ones they know, which drives matching. arXiv doesn't use these.",
+      "definition": "A ResearchGuild tag inside a category, such as “Agents & planning” in cs.AI. Authors tag papers with 1–3 sub-topics and endorsers follow the ones they know, which drives matching. arXiv doesn't use these.",
       "article": null
     },
     {
@@ -189,7 +189,7 @@
       "aliases": [
         "endorsers"
       ],
-      "definition": "An arXiv author who is eligible to endorse in a subject area, which depends on their own recent papers there. On Endorse Commons, endorsers are volunteers who opt in to read abstracts.",
+      "definition": "An arXiv author who is eligible to endorse in a subject area, which depends on their own recent papers there. On ResearchGuild, endorsers are volunteers who opt in to read abstracts.",
       "article": "am-i-eligible-to-endorse"
     },
     {
@@ -230,7 +230,7 @@
       "aliases": [
         "show-endorsers"
       ],
-      "definition": "arXiv's page that lists which authors of a given paper can endorse. Endorsers on Endorse Commons link one as evidence of eligibility.",
+      "definition": "arXiv's page that lists which authors of a given paper can endorse. Endorsers on ResearchGuild link one as evidence of eligibility.",
       "article": "am-i-eligible-to-endorse"
     },
     {
@@ -317,7 +317,7 @@
       "aliases": [
         "reviewers"
       ],
-      "definition": "On Endorse Commons, an endorser who has accepted your abstract and received your full paper. Up to 3 can hold a paper at once.",
+      "definition": "On ResearchGuild, an endorser who has accepted your abstract and received your full paper. Up to 3 can hold a paper at once.",
       "article": null
     },
     {

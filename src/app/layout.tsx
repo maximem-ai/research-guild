@@ -4,9 +4,9 @@ import { APP_NAME, SITE_URL } from "@/lib/env";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: `${APP_NAME} — feedback and fair access for first-time researchers`, template: `%s · ${APP_NAME}` },
+  title: { default: `${APP_NAME}: get feedback and an arXiv endorsement for your first paper`, template: `%s · ${APP_NAME}` },
   description:
-    "A free, open-source community that helps first-time researchers learn how open science works, get honest feedback from people who have published, and find someone willing to vouch for their work.",
+    "Post your abstract, get honest feedback from people who have published, and find an arXiv endorser in your field. Free, open source, with a sign-in-free learning center.",
   openGraph: { siteName: APP_NAME, type: "website" },
   twitter: { card: "summary_large_image" },
 };

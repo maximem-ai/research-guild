@@ -13,7 +13,7 @@ export default function ReadinessPage() {
       <h1 className="h1">arXiv readiness check</h1>
       <p className="mt-3 muted">
         Seven quick questions to see whether your paper is ready to post. No sign-in, and your answers never leave your browser. The same
-        check is required before you post an abstract on Endorse Commons.
+        check is required before you post an abstract on ResearchGuild.
       </p>
       <div className="mt-8"><ReadinessCheck /></div>
     </div>

@@ -4,7 +4,7 @@ import { APP_NAME } from "@/lib/env";
 export function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2 font-serif text-lg font-semibold no-underline">
-      <span aria-hidden className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[var(--brand-black)] text-sm font-bold text-[var(--brand-orange)] ring-1 ring-[var(--border)]">EC</span>
+      <span aria-hidden className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[var(--brand-black)] text-sm font-bold text-[var(--brand-orange)] ring-1 ring-[var(--border)]">RG</span>
       {APP_NAME}
     </Link>
   );
@@ -18,6 +18,7 @@ export function SiteHeader() {
         <Logo />
         <div className="flex items-center gap-4 text-sm">
           <Link href="/learn" className="hover:underline">Learn</Link>
+          <Link href="/#faq" className="hover:underline">FAQ</Link>
           <Link href="/karma" className="hidden hover:underline sm:inline">Karma</Link>
           <Link href="/about" className="hidden hover:underline sm:inline">About</Link>
           <Link href="/app" className="btn btn-primary btn-sm">Open app</Link>
