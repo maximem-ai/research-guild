@@ -32,7 +32,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.7",
     "@opennextjs/cloudflare": "^1.20.7",
-    "@playwright/test": "1.56.1",
+    "@playwright/test": "1.63.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^22",
     "@types/react": "^19",
